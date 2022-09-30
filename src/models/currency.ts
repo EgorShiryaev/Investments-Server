@@ -1,6 +1,6 @@
-interface Currency{
-    code: string,
-    title: string,
+interface Currency {
+  code: string;
+  title: string;
 }
 
 export default Currency;
