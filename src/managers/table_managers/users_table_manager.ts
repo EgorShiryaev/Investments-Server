@@ -7,7 +7,7 @@ const createUsersTableIfNotExists = () => {
   const columnsInfo = TABLE_SETTINGS.columns
     .map((v) => `${v.columnTitle} ${v.type} ${v.limit && v.limit}`)
     .join(", ");
-  const sqlScript = `CREATE TABLE IF NOT EXISTS ${TABLE_SETTINGS.title} (id INTEGER NOT NULL AUTO_INCREMENT, ${columnsInfo}, PRIMARY KEY (id))`;
+  const sqlScript = `CREATE TABLE IF NOT EXISTS ${TABLE_SETTINGS.title} (${columnsInfo}, PRIMARY KEY (uuid))`;
 
   DatabaseManager.createTableIfNotExists(TABLE_SETTINGS.title, sqlScript);
 };
