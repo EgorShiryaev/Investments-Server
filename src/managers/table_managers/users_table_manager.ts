@@ -4,23 +4,28 @@ import DatabaseSettings from "../../../settings/database_settings";
 const TABLE_SETTINGS = DatabaseSettings["usersTable"];
 
 const createUsersTableIfNotExists = () => {
-  DatabaseManager.createTableIfNotExists(
-    TABLE_SETTINGS.title,
-    TABLE_SETTINGS.columns
-  );
+  const columnsInfo = TABLE_SETTINGS.columns
+    .map((v) => `${v.columnTitle} ${v.type} ${v.limit && v.limit}`)
+    .join(", ");
+  const sqlScript = `CREATE TABLE IF NOT EXISTS ${TABLE_SETTINGS.title} (id INTEGER NOT NULL AUTO_INCREMENT, ${columnsInfo}, PRIMARY KEY (id))`;
+
+  DatabaseManager.createTableIfNotExists(TABLE_SETTINGS.title, sqlScript);
 };
 
 const getUser = (uuid: string) => {
-  return DatabaseManager.getAll(TABLE_SETTINGS.title, `WHERE uuid = ${uuid}`);
+  const sqlScript = `SELECT * FROM ${TABLE_SETTINGS.title} WHERE  uuid = ${uuid}`;
+  return DatabaseManager.getAll(sqlScript);
 };
 
 const createUser = (uuid: string) => {
-  const columns = TABLE_SETTINGS.columns.map((v) => v.columnTitle);
-  return DatabaseManager.insert(TABLE_SETTINGS.title, columns, [uuid]);
+  const columns = TABLE_SETTINGS.columns.map((v) => v.columnTitle).join(", ");
+  const sqlScript = `INSERT INTO ${TABLE_SETTINGS.title} (${columns}) VALUES (${uuid})`;
+
+  return DatabaseManager.insert(sqlScript);
 };
 
 export default {
-  createUsersTableIfNotExists, 
+  createUsersTableIfNotExists,
   getUser,
-  createUser, 
-}
+  createUser,
+};

@@ -1,14 +1,9 @@
 import { route } from "express/lib/application";
+import { RunResult } from "sqlite3";
 import DATABASE from "../database";
 import Column from "./models/column";
 
-const createTableIfNotExists = (tableTitle: string, columns: Column[]) => {
-  const columnsInfo = columns
-    .map((v) => `${v.columnTitle} ${v.type} ${v.limit && v.limit}`)
-    .join(", ");
-
-  const sqlScript = `CREATE TABLE IF NOT EXISTS ${tableTitle} (id INTEGER NOT NULL AUTO_INCREMENT, ${columnsInfo}, PRIMARY KEY (id))`;
-
+const createTableIfNotExists = (tableTitle: string, sqlScript: string) => {
   console.log(sqlScript);
 
   DATABASE.serialize(() => {
@@ -18,9 +13,7 @@ const createTableIfNotExists = (tableTitle: string, columns: Column[]) => {
   });
 };
 
-const getAll = (tableTitle: string, where?: string) => {
-  const sqlScript = `SELECT * FROM ${tableTitle} ${where && `WHERE ${where}`}`;
-
+const getAll = (sqlScript: string) => {
   console.log(sqlScript);
 
   return new Promise((resolve, reject) => {
@@ -36,70 +29,40 @@ const getAll = (tableTitle: string, where?: string) => {
   });
 };
 
-const insert = (tableTitle: string, columnTitles: string[], values: any[]) => {
-  const columns = columnTitles.map((v) => v).join(", ");
-  const valuesPlaceholder = columnTitles.map(() => "?").join(", ");
-
+const insert = (sqlScript: string) => {
   return new Promise((resolve, reject) => {
     DATABASE.serialize(() => {
-      const stmt = DATABASE.prepare(
-        `INSERT INTO ${tableTitle} (${columns}) VALUES (${valuesPlaceholder})`,
-        (error) => {
-          if (error) {
-            console.log("Insert error: " + error);
-            reject(error);
-          }
-        }
-      );
-      stmt.run(values, (error) => {
+      DATABASE.run(sqlScript, (result: RunResult, error) => {
         if (error) {
           console.log("Insert error: " + error);
           reject(error);
         } else {
-          resolve("Success");
+          resolve(result.lastID);
         }
       });
-      stmt.finalize();
     });
   });
 };
 
-const update = (
-  tableTitle: string,
-  columnTitles: string[],
-  values: any[],
-  where: string
-) => {
-  const columns = columnTitles.map((v) => `${v} = ?`).join(", ");
-
+const update = (sqlScript: string) => {
   return new Promise((resolve, reject) => {
     DATABASE.serialize(() => {
-      const stmt = DATABASE.prepare(
-        `UPDATE ${tableTitle} SET ${columns} WHERE ${where}`,
-        (error) => {
-          if (error) {
-            console.log("Update error: " + error);
-            reject(error);
-          }
-        }
-      );
-      stmt.run(values, (error) => {
+      DATABASE.run(sqlScript, (runResult: RunResult, error) => {
         if (error) {
-          console.log("Update error", error);
+          console.log("Update error: " + error);
           reject(error);
         } else {
-          resolve("Success");
+          resolve(runResult.lastID);
         }
       });
-      stmt.finalize();
     });
   });
 };
 
-const remove = (tableTitle: string, where: string) => {
+const remove = (sqlScript: string) => {
   return new Promise((resolve, reject) => {
     DATABASE.serialize(() => {
-      DATABASE.run(`DELETE ${tableTitle} WHERE ${where}`, (error) => {
+      DATABASE.run(sqlScript, (error) => {
         if (error) {
           console.log("Delete error: " + error);
           reject(error);
