@@ -48,23 +48,13 @@
     "title": "UserPortfolioInvestments",
     "columns": [
       {
-        "columnTitle": "userUuid",
+        "columnTitle": "userId",
         "type": "TEXT",
         "limit": "NOT NULL"
       },
       {
         "columnTitle": "investmentId",
         "type": "INTEGER",
-        "limit": "NOT NULL"
-      },
-      {
-        "columnTitle": "quantity",
-        "type": "INTEGER",
-        "limit": "NOT NULL"
-      },
-      {
-        "columnTitle": "averagePrice",
-        "type": "REAL",
         "limit": "NOT NULL"
       }
     ]

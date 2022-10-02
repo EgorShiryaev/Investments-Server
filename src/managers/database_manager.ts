@@ -1,9 +1,8 @@
-import { route } from "express/lib/application";
 import { RunResult } from "sqlite3";
 import DATABASE from "../database";
-import Column from "./models/column";
 
-const createTableIfNotExists = (tableTitle: string, sqlScript: string) => {
+const createTableIfNotExists = (tableTitle: string, columns: string) => {
+  const sqlScript = `CREATE TABLE IF NOT EXISTS ${tableTitle} (id INTEGER NOT NULL AUTO_INCREMENT, ${columns}, PRIMARY KEY (id))`;
   console.log(sqlScript);
 
   DATABASE.serialize(() => {
@@ -13,7 +12,8 @@ const createTableIfNotExists = (tableTitle: string, sqlScript: string) => {
   });
 };
 
-const getAll = (sqlScript: string) => {
+const getAll = (tableTitle: string, where: string) => {
+  const sqlScript = `SELECT * FROM ${tableTitle} WHERE ${where}`;
   console.log(sqlScript);
 
   return new Promise((resolve, reject) => {
@@ -29,7 +29,10 @@ const getAll = (sqlScript: string) => {
   });
 };
 
-const insert = (sqlScript: string) => {
+const insert = (tableTitle: string, columns: string, values: string) => {
+  const sqlScript = `INSERT INTO ${tableTitle} (${columns}) VALUES (${values})`;
+  console.log(sqlScript);
+
   return new Promise((resolve, reject) => {
     DATABASE.serialize(() => {
       DATABASE.run(sqlScript, (result: RunResult, error) => {
@@ -44,7 +47,10 @@ const insert = (sqlScript: string) => {
   });
 };
 
-const update = (sqlScript: string) => {
+const update = (tableTitle: string, set: string, where: string) => {
+  const sqlScript = `UPDATE ${tableTitle} SET ${set} WHERE ${where}`;
+  console.log(sqlScript);
+
   return new Promise((resolve, reject) => {
     DATABASE.serialize(() => {
       DATABASE.run(sqlScript, (runResult: RunResult, error) => {
@@ -59,7 +65,10 @@ const update = (sqlScript: string) => {
   });
 };
 
-const remove = (sqlScript: string) => {
+const remove = (tableTitle: string, where: string) => {
+  const sqlScript = `DELETE ${tableTitle} WHERE ${where}`;
+  console.log(sqlScript);
+
   return new Promise((resolve, reject) => {
     DATABASE.serialize(() => {
       DATABASE.run(sqlScript, (error) => {
