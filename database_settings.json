@@ -44,12 +44,12 @@
       }
     ]
   },
-  "userPortfolioInvestmentsTable": {
-    "title": "UserPortfolioInvestments",
+  "userInvestmentsTable": {
+    "title": "userInvestments",
     "columns": [
       {
         "columnTitle": "userId",
-        "type": "TEXT",
+        "type": "INTEGER",
         "limit": "NOT NULL"
       },
       {

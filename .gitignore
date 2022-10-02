@@ -3,4 +3,4 @@ node_modules/
 
 .DS_Store
 settings.json
-investment_portfolio_server.sqlite
+db.sqlite

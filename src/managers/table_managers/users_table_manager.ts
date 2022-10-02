@@ -3,6 +3,8 @@ import DatabaseSettings from "../../../database_settings";
 import User from "../../models/user";
 import Column from "../models/column";
 
+export type UserSqlModel = User & SqlModel;
+
 const TABLE_SETTINGS = DatabaseSettings["usersTable"];
 
 const createUsersTableIfNotExists = () => {
@@ -16,7 +18,7 @@ const createUsersTableIfNotExists = () => {
 const getUser = (uuid: string) => {
   const where = `uuid = ${uuid}`;
 
-  return DatabaseManager.getAll<User>(TABLE_SETTINGS.title, where);
+  return DatabaseManager.getAll<UserSqlModel>(TABLE_SETTINGS.title, where);
 };
 
 const createUser = (uuid: string) => {

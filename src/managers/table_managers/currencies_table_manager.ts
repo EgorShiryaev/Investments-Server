@@ -3,6 +3,8 @@ import DatabaseSettings from "../../../database_settings";
 import Currency from "../../models/currency";
 import Column from "../models/column";
 
+export type CurrencySqlModel = Currency & SqlModel;
+
 const TABLE_SETTINGS = DatabaseSettings["currenciesTable"];
 
 const createCurrenciesTableIfNotExists = () => {
@@ -13,16 +15,15 @@ const createCurrenciesTableIfNotExists = () => {
   DatabaseManager.createTableIfNotExists(TABLE_SETTINGS.title, columns);
 };
 
-const getCurrency = (id: string) => {
-  const where = `id = ${id}`;
-  return DatabaseManager.getAll(TABLE_SETTINGS.title, where);
+const getCurrency = (where: string) => {
+  return DatabaseManager.getAll<CurrencySqlModel>(TABLE_SETTINGS.title, where);
 };
 
 const createCurrency = (currency: Currency) => {
   const columns = TABLE_SETTINGS.columns
     .map((v: Column) => v.columnTitle)
     .join(", ");
-  const values = `${currency.code}, ${currency.title}`;
+  const values = `"${currency.code}", "${currency.title}"`;
 
   return DatabaseManager.insert(TABLE_SETTINGS.title, columns, values);
 };
