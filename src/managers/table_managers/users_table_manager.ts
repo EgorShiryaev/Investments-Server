@@ -1,11 +1,13 @@
 import DatabaseManager from "../database_manager";
-import DatabaseSettings from "../../../settings/database_settings";
+import DatabaseSettings from "../../../database_settings";
+import User from "../../models/user";
+import Column from "../models/column";
 
 const TABLE_SETTINGS = DatabaseSettings["usersTable"];
 
 const createUsersTableIfNotExists = () => {
   const columnsInfo = TABLE_SETTINGS.columns
-    .map((v) => `${v.columnTitle} ${v.type} ${v.limit && v.limit}`)
+    .map((v: Column) => `${v.columnTitle} ${v.type} ${v.limit && v.limit}`)
     .join(", ");
 
   DatabaseManager.createTableIfNotExists(TABLE_SETTINGS.title, columnsInfo);
@@ -14,11 +16,13 @@ const createUsersTableIfNotExists = () => {
 const getUser = (uuid: string) => {
   const where = `uuid = ${uuid}`;
 
-  return DatabaseManager.getAll(TABLE_SETTINGS.title, where);
+  return DatabaseManager.getAll<User>(TABLE_SETTINGS.title, where);
 };
 
 const createUser = (uuid: string) => {
-  const columns = TABLE_SETTINGS.columns.map((v) => v.columnTitle).join(", ");
+  const columns = TABLE_SETTINGS.columns
+    .map((v: Column) => v.columnTitle)
+    .join(", ");
   const values = uuid;
 
   return DatabaseManager.insert(TABLE_SETTINGS.title, columns, values);
