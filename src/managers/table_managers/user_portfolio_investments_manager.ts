@@ -11,8 +11,8 @@ const createUserPortfolioInvestmentsTableIfNotExists = () => {
   DatabaseManager.createTableIfNotExists(TABLE_SETTINGS.title, columns);
 };
 
-const getAllUserPortfolioInvestments = (userUuid: string) => {
-  const where = `userUuid = ${userUuid}`;
+const getAllUserPortfolioInvestments = (userId: string) => {
+  const where = `userId = ${userId}`;
 
   return DatabaseManager.getAll(TABLE_SETTINGS.title, where);
 };
@@ -28,10 +28,10 @@ const createUserPortfolioInvestment = (
 };
 
 const deleteUserPortfolioInvestment = (
-  userUuid: string,
+  userId: string,
   investmentId: string
 ) => {
-  const where = `userUuid = ${userUuid}, investmentId = ${investmentId}`;
+  const where = `userId = ${userId}, investmentId = ${investmentId}`;
 
   return DatabaseManager.remove(TABLE_SETTINGS.title, where);
 };
