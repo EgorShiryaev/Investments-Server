@@ -7,21 +7,21 @@ const createUsersTableIfNotExists = () => {
   const columnsInfo = TABLE_SETTINGS.columns
     .map((v) => `${v.columnTitle} ${v.type} ${v.limit && v.limit}`)
     .join(", ");
-  const sqlScript = `CREATE TABLE IF NOT EXISTS ${TABLE_SETTINGS.title} (${columnsInfo}, PRIMARY KEY (uuid))`;
 
-  DatabaseManager.createTableIfNotExists(TABLE_SETTINGS.title, sqlScript);
+  DatabaseManager.createTableIfNotExists(TABLE_SETTINGS.title, columnsInfo);
 };
 
 const getUser = (uuid: string) => {
-  const sqlScript = `SELECT * FROM ${TABLE_SETTINGS.title} WHERE  uuid = ${uuid}`;
-  return DatabaseManager.getAll(sqlScript);
+  const where = `uuid = ${uuid}`;
+
+  return DatabaseManager.getAll(TABLE_SETTINGS.title, where);
 };
 
 const createUser = (uuid: string) => {
   const columns = TABLE_SETTINGS.columns.map((v) => v.columnTitle).join(", ");
-  const sqlScript = `INSERT INTO ${TABLE_SETTINGS.title} (${columns}) VALUES (${uuid})`;
+  const values = uuid;
 
-  return DatabaseManager.insert(sqlScript);
+  return DatabaseManager.insert(TABLE_SETTINGS.title, columns, values);
 };
 
 export default {

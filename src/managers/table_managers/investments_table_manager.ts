@@ -5,25 +5,23 @@ import Investment from "./../../models/investment";
 const TABLE_SETTINGS = DatabaseSettings["investmentsTable"];
 
 const createInvestmentsTableIfNotExists = () => {
-  const columnsInfo = TABLE_SETTINGS.columns
+  const columns = TABLE_SETTINGS.columns
     .map((v) => `${v.columnTitle} ${v.type} ${v.limit && v.limit}`)
     .join(", ");
-  const sqlScript = `CREATE TABLE IF NOT EXISTS ${TABLE_SETTINGS.title} (id INTEGER NOT NULL AUTO_INCREMENT, ${columnsInfo}, PRIMARY KEY (id))`;
 
-  DatabaseManager.createTableIfNotExists(TABLE_SETTINGS.title, sqlScript);
+  DatabaseManager.createTableIfNotExists(TABLE_SETTINGS.title, columns);
 };
 
 const getInvestment = (id: string) => {
-  const sqlScript = `SELECT * FROM ${TABLE_SETTINGS.title} WHERE id = ${id}`;
-
-  return DatabaseManager.getAll(sqlScript);
+  const where = `id = ${id}`;
+  return DatabaseManager.getAll(TABLE_SETTINGS.title, where);
 };
 
 const createInvestment = (investment: Investment, currencyId: number) => {
   const columns = TABLE_SETTINGS.columns.map((v) => v.columnTitle).join(", ");
-  const sqlScript = `INSERT INTO ${TABLE_SETTINGS.title} (${columns}) VALUES (${investment.prefix}, ${investment.title}, ${currencyId})`;
+  const values = `${investment.prefix}, ${investment.title}, ${currencyId}`;
 
-  return DatabaseManager.insert(sqlScript);
+  return DatabaseManager.insert(TABLE_SETTINGS.title, columns, values);
 };
 
 export default {
