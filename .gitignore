@@ -1,3 +1,6 @@
+dist/
 node_modules/
-/settings/settings.json
+
 .DS_Store
+settings.json
+investment_portfolio_server.sqlite
