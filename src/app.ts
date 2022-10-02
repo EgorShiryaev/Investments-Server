@@ -5,33 +5,61 @@ import {
   CurrenciesTableManager,
   InvestmentsTableManager,
   UsersTableManager,
-  UserPortfolioInvestmentsManager,
+  UserInvestmentsManager,
 } from "../src/managers";
+import postUserInvestment from "./methods/post_user_investment";
+import deleteIdAttribute from "./response_parser";
 
 const APP = express();
-
-APP.get("/user", (request, response) => {
-  console.log("query", request.query);
-
-  const { uuid } = request.query;
-
-  if (typeof uuid === "string") {
-    getUser(uuid)
-      .then((user) => {
-        response.send({ user: user });
-      })
-      .catch((error) => {
-        response.status(500).send({ message: error });
-      });
-  } else {
-    response.status(400).send({ message: "'uuid' parameter not found" });
-  }
-});
+const jsonParser = express.json();
 
 APP.listen(Settings.serverPort, Settings.serverUrl, () => {
   console.log("Success create server");
   UsersTableManager.createUsersTableIfNotExists();
   CurrenciesTableManager.createCurrenciesTableIfNotExists();
   InvestmentsTableManager.createInvestmentsTableIfNotExists();
-  UserPortfolioInvestmentsManager.createUserPortfolioInvestmentsTableIfNotExists();
+  UserInvestmentsManager.createUserPortfolioInvestmentsTableIfNotExists();
+});
+
+const USER_UUID = "user-uuid";
+
+APP.get("/user", (request, response) => {
+  const userUuid = request.headers[USER_UUID];
+
+  if (typeof userUuid === "string") {
+    getUser(userUuid)
+      .then((user) => {
+        response.send({ user: deleteIdAttribute(user) });
+      })
+      .catch((error) => {
+        response.status(500).send({ message: error });
+      });
+  } else {
+    response.status(400).send({ message: "'userUuid' header not found" });
+  }
+});
+
+APP.post("/userInvestment", jsonParser, (request, response) => {
+  const userUuid = request.headers[USER_UUID];
+
+  const { investment } = request.body;
+
+  if (typeof userUuid === "string" && investment) {
+    postUserInvestment(userUuid, investment)
+      .then((investment) => {
+        response.send(investment);
+      })
+      .catch((error) => {
+        response.status(500).send({ message: error });
+      });
+  } else {
+    const message =
+      !userUuid &&
+      "'userUuid' header not found'" + !investment &&
+      "'investment' body parameter not found";
+
+    response.status(400).send({
+      message: message,
+    });
+  }
 });

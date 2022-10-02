@@ -2,7 +2,13 @@ import DatabaseManager from "../database_manager";
 import DatabaseSettings from "../../../database_settings";
 import Column from "../models/column";
 
-const TABLE_SETTINGS = DatabaseSettings["userPortfolioInvestmentsTable"];
+export interface UserInvestmentSqlModel {
+  id: number;
+  investmentId: number;
+  userId: number;
+}
+
+const TABLE_SETTINGS = DatabaseSettings["userInvestmentsTable"];
 
 const createUserPortfolioInvestmentsTableIfNotExists = () => {
   const columns = TABLE_SETTINGS.columns
@@ -15,17 +21,20 @@ const createUserPortfolioInvestmentsTableIfNotExists = () => {
 const getAllUserPortfolioInvestments = (userId: string) => {
   const where = `userId = ${userId}`;
 
-  return DatabaseManager.getAll(TABLE_SETTINGS.title, where);
+  return DatabaseManager.getAll<UserInvestmentSqlModel>(
+    TABLE_SETTINGS.title,
+    where
+  );
 };
 
 const createUserPortfolioInvestment = (
-  userUuid: string,
-  investmentId: string
+  userId: number,
+  investmentId: number
 ) => {
   const columns = TABLE_SETTINGS.columns
     .map((v: Column) => v.columnTitle)
     .join(", ");
-  const values = `${userUuid}, ${investmentId}`;
+  const values = `${userId}, ${investmentId}`;
 
   return DatabaseManager.insert(TABLE_SETTINGS.title, columns, values);
 };
