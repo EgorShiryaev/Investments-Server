@@ -45,7 +45,7 @@
     ]
   },
   "userInvestmentsTable": {
-    "title": "UserInvestmens",
+    "title": "userInvestments",
     "columns": [
       {
         "columnTitle": "userId",

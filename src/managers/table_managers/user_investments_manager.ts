@@ -18,8 +18,7 @@ const createUserPortfolioInvestmentsTableIfNotExists = () => {
   DatabaseManager.createTableIfNotExists(TABLE_SETTINGS.title, columns);
 };
 
-const getAllUserPortfolioInvestments = (userId: string) => {
-  const where = `userId = ${userId}`;
+const getUserInvestments = (where: string) => {
 
   return DatabaseManager.getAll<UserInvestmentSqlModel>(
     TABLE_SETTINGS.title,
@@ -50,7 +49,7 @@ const deleteUserPortfolioInvestment = (
 
 export default {
   createUserPortfolioInvestmentsTableIfNotExists,
-  getAllUserPortfolioInvestments,
+  getUserInvestments,
   createUserPortfolioInvestment,
   deleteUserPortfolioInvestment,
 };

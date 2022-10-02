@@ -3,7 +3,9 @@ import { CurrencySqlModel } from "../managers/table_managers/currencies_table_ma
 import Currency from "../models/currency";
 
 const getCurrency = async (currency: Currency): Promise<CurrencySqlModel> => {
-  const rows = await CurrenciesTableManager.getCurrency(currency.code);
+  const rows = await CurrenciesTableManager.getCurrency(
+    `code = "${currency.code}"`
+  );
 
   if (rows.length) {
     const currency = rows[0];

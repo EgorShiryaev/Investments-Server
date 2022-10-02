@@ -3,7 +3,11 @@ import DatabaseSettings from "../../../database_settings";
 import Investment from "./../../models/investment";
 import Column from "../models/column";
 
-export type InvestmentSqlModel = Investment & SqlModel;
+export type InvestmentSqlModel = {
+  prefix: string;
+  title: string;
+  currencyId: number;
+} & SqlModel;
 
 const TABLE_SETTINGS = DatabaseSettings["investmentsTable"];
 
@@ -15,8 +19,7 @@ const createInvestmentsTableIfNotExists = () => {
   DatabaseManager.createTableIfNotExists(TABLE_SETTINGS.title, columns);
 };
 
-const getInvestment = (prefix: string) => {
-  const where = `prefix = "${prefix}"`;
+const getInvestment = (where: string) => {
   return DatabaseManager.getAll<InvestmentSqlModel>(
     TABLE_SETTINGS.title,
     where

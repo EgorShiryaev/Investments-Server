@@ -6,7 +6,9 @@ const getInvestment = async (
   investment: Investment,
   currencyId: number
 ): Promise<InvestmentSqlModel> => {
-  const rows = await InvestmentsTableManager.getInvestment(investment.prefix);
+  const rows = await InvestmentsTableManager.getInvestment(
+    `prefix = "${investment.prefix}"`
+  );
 
   if (rows.length) {
     const investment = rows[0];

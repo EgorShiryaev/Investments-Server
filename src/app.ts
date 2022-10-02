@@ -9,6 +9,7 @@ import {
 } from "../src/managers";
 import postUserInvestment from "./methods/post_user_investment";
 import deleteIdAttribute from "./response_parser";
+import getUserInvestments from "./methods/get_user_investments";
 
 const APP = express();
 const jsonParser = express.json();
@@ -61,5 +62,21 @@ APP.post("/userInvestment", jsonParser, (request, response) => {
     response.status(400).send({
       message: message,
     });
+  }
+});
+
+APP.get("/userInvestment", (request, response) => {
+  const userUuid = request.headers[USER_UUID];
+
+  if (typeof userUuid === "string") {
+    getUserInvestments(userUuid)
+      .then((investments) => {
+        response.send({ investments: investments });
+      })
+      .catch((error) => {
+        response.status(500).send({ message: error });
+      });
+  } else {
+    response.status(400).send({ message: "'userUuid' header not found" });
   }
 });

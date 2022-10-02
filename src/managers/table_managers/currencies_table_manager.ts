@@ -15,8 +15,7 @@ const createCurrenciesTableIfNotExists = () => {
   DatabaseManager.createTableIfNotExists(TABLE_SETTINGS.title, columns);
 };
 
-const getCurrency = (code: string) => {
-  const where = `code = "${code}"`;
+const getCurrency = (where: string) => {
   return DatabaseManager.getAll<CurrencySqlModel>(TABLE_SETTINGS.title, where);
 };
 

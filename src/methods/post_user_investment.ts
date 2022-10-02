@@ -11,9 +11,38 @@ const postUserInvestment = async (userUuid: string, investment: Investment) => {
 
   const currentInvestment = await getInvestment(investment, currency.id);
 
+  const userInvestments = await UserInvestmentsManager.getUserInvestments(
+    `userId = ${user.id}`
+  );
+
+  if (userInvestments.length) {
+    let isExist = false;
+    userInvestments.forEach((v) => {
+      if (v.investmentId === currentInvestment.id) {
+        isExist = true;
+      }
+    });
+
+    if (!isExist) {
+      return await createUserPortfolioInvestment(user.id, currentInvestment.id);
+    } else {
+      return {
+        success: false,
+        message: "Invest is exists",
+      };
+    }
+  } else {
+    return await createUserPortfolioInvestment(user.id, currentInvestment.id);
+  }
+};
+
+const createUserPortfolioInvestment = async (
+  userId: number,
+  investId: number
+) => {
   return await UserInvestmentsManager.createUserPortfolioInvestment(
-    user.id,
-    currentInvestment.id
+    userId,
+    investId
   );
 };
 
