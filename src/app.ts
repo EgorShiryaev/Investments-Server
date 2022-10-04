@@ -1,5 +1,5 @@
 import express from "express";
-import getUser from "./methods/get_user";
+import { ServerOptions, WebSocketServer } from "ws";
 import Settings from "../settings";
 import {
   CurrenciesTableManager,
@@ -7,12 +7,20 @@ import {
   UsersTableManager,
   UserInvestmentsManager,
 } from "../src/managers";
-import postUserInvestment from "./methods/post_user_investment";
-import deleteIdAttribute from "./response_parser";
-import getUserInvestments from "./methods/get_user_investments";
+import initMethods from "./server";
 
-const APP = express();
-const jsonParser = express.json();
+export const APP = express();
+export const jsonParser = express.json();
+
+const wssOptions: ServerOptions = {
+  port: 8000,
+  host: `${Settings.serverUrl}`,
+  path: "/quotations",
+};
+
+export const WebSocketServerInstance = new WebSocketServer(wssOptions);
+
+initMethods();
 
 APP.listen(Settings.serverPort, Settings.serverUrl, () => {
   console.log("Success create server");
@@ -20,63 +28,4 @@ APP.listen(Settings.serverPort, Settings.serverUrl, () => {
   CurrenciesTableManager.createCurrenciesTableIfNotExists();
   InvestmentsTableManager.createInvestmentsTableIfNotExists();
   UserInvestmentsManager.createUserPortfolioInvestmentsTableIfNotExists();
-});
-
-const USER_UUID = "user-uuid";
-
-APP.get("/user", (request, response) => {
-  const userUuid = request.headers[USER_UUID];
-
-  if (typeof userUuid === "string") {
-    getUser(userUuid)
-      .then((user) => {
-        response.send({ user: deleteIdAttribute(user) });
-      })
-      .catch((error) => {
-        response.status(500).send({ message: error });
-      });
-  } else {
-    response.status(400).send({ message: "'userUuid' header not found" });
-  }
-});
-
-APP.post("/userInvestment", jsonParser, (request, response) => {
-  const userUuid = request.headers[USER_UUID];
-
-  const { investment } = request.body;
-
-  if (typeof userUuid === "string" && investment) {
-    postUserInvestment(userUuid, investment)
-      .then((investment) => {
-        response.send(investment);
-      })
-      .catch((error) => {
-        response.status(500).send({ message: error });
-      });
-  } else {
-    const message =
-      !userUuid &&
-      "'userUuid' header not found'" + !investment &&
-      "'investment' body parameter not found";
-
-    response.status(400).send({
-      message: message,
-    });
-  }
-});
-
-APP.get("/userInvestment", (request, response) => {
-  const userUuid = request.headers[USER_UUID];
-
-  if (typeof userUuid === "string") {
-    getUserInvestments(userUuid)
-      .then((investments) => {
-        response.send({ investments: investments });
-      })
-      .catch((error) => {
-        response.status(500).send({ message: error });
-      });
-  } else {
-    response.status(400).send({ message: "'userUuid' header not found" });
-  }
 });

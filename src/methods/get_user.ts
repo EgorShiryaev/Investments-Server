@@ -1,7 +1,6 @@
-import User from "../models/user";
 import UsersTableManager, {
   UserSqlModel,
-} from "./../managers/table_managers/users_table_manager";
+} from "../managers/table_managers/users_table_manager";
 
 const getUser = async (uuid: string): Promise<UserSqlModel> => {
   const rows = await UsersTableManager.getUser(uuid);
