@@ -1,6 +1,6 @@
 import { RunResult } from "sqlite3";
 import DATABASE from "../database";
-import DatabaseResponse from "../models/database_response";
+import DatabaseResponse from "./models/database_response";
 
 const createTableIfNotExists = (tableTitle: string, columns: string) => {
   const sqlScript = `CREATE TABLE IF NOT EXISTS ${tableTitle} (id INTEGER NOT NULL, ${columns}, PRIMARY KEY (id))`;

@@ -1,7 +1,8 @@
 import DatabaseManager from "../database_manager";
 import DatabaseSettings from "../../../database_settings";
-import Investment from "./../../models/investment";
+import InvestmentEntity from "../../entities/investment_entity";
 import Column from "../models/column";
+import SqlModel from "../models/sql_model";
 
 export type InvestmentSqlModel = {
   prefix: string;
@@ -11,7 +12,7 @@ export type InvestmentSqlModel = {
 
 const TABLE_SETTINGS = DatabaseSettings["investmentsTable"];
 
-const createInvestmentsTableIfNotExists = () => {
+const createTableIfNotExists = () => {
   const columns = TABLE_SETTINGS.columns
     .map((v: Column) => `${v.columnTitle} ${v.type} ${v.limit && v.limit}`)
     .join(", ");
@@ -19,14 +20,14 @@ const createInvestmentsTableIfNotExists = () => {
   DatabaseManager.createTableIfNotExists(TABLE_SETTINGS.title, columns);
 };
 
-const getInvestment = (where: string) => {
+const get = (where: string) => {
   return DatabaseManager.getAll<InvestmentSqlModel>(
     TABLE_SETTINGS.title,
     where
   );
 };
 
-const createInvestment = (investment: Investment, currencyId: number) => {
+const create = (investment: InvestmentEntity, currencyId: number) => {
   const columns = TABLE_SETTINGS.columns
     .map((v: Column) => v.columnTitle)
     .join(", ");
@@ -36,7 +37,7 @@ const createInvestment = (investment: Investment, currencyId: number) => {
 };
 
 export default {
-  createInvestmentsTableIfNotExists,
-  getInvestment,
-  createInvestment,
+  createTableIfNotExists,
+  get,
+  create,
 };

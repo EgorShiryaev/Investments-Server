@@ -1,13 +1,14 @@
 import DatabaseManager from "../database_manager";
 import DatabaseSettings from "../../../database_settings";
-import Currency from "../../models/currency";
+import CurrencyEntity from "../../entities/currency_entity";
 import Column from "../models/column";
+import SqlModel from "../models/sql_model";
 
-export type CurrencySqlModel = Currency & SqlModel;
+export type CurrencySqlModel = CurrencyEntity & SqlModel;
 
 const TABLE_SETTINGS = DatabaseSettings["currenciesTable"];
 
-const createCurrenciesTableIfNotExists = () => {
+const createTableIfNotExists = () => {
   const columns = TABLE_SETTINGS.columns
     .map((v: Column) => `${v.columnTitle} ${v.type} ${v.limit && v.limit}`)
     .join(", ");
@@ -15,11 +16,11 @@ const createCurrenciesTableIfNotExists = () => {
   DatabaseManager.createTableIfNotExists(TABLE_SETTINGS.title, columns);
 };
 
-const getCurrency = (where: string) => {
+const get = (where: string) => {
   return DatabaseManager.getAll<CurrencySqlModel>(TABLE_SETTINGS.title, where);
 };
 
-const createCurrency = (currency: Currency) => {
+const create = (currency: CurrencyEntity) => {
   const columns = TABLE_SETTINGS.columns
     .map((v: Column) => v.columnTitle)
     .join(", ");
@@ -29,7 +30,7 @@ const createCurrency = (currency: Currency) => {
 };
 
 export default {
-  createCurrenciesTableIfNotExists,
-  getCurrency,
-  createCurrency,
+  createTableIfNotExists,
+  get,
+  create,
 };
