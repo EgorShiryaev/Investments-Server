@@ -7,10 +7,29 @@ import {
   UsersTableManager,
   UserInvestmentsManager,
 } from "../src/managers";
-import initMethods from "./server";
+import {
+  ADD_USER_INVESTMENT_PATH,
+  USER_INVESTMENTS_PATH,
+  USER_PATH,
+} from "./constants/method_paths";
+import getUserHandler from "./handlers/get_user_handler";
+import getUserInvestmentsHandler from "./handlers/get_user_investments_handler";
+import postAddUserInvestmentHandler from "./handlers/post_add_user_investment_handler";
 
-export const APP = express();
-export const jsonParser = express.json();
+const app = express();
+const jsonParser = express.json();
+
+app.listen(Settings.serverPort, Settings.serverUrl, () => {
+  console.log("Success create server");
+  UsersTableManager.createTableIfNotExists();
+  CurrenciesTableManager.createTableIfNotExists();
+  InvestmentsTableManager.createTableIfNotExists();
+  UserInvestmentsManager.createTableIfNotExists();
+});
+
+app.get(USER_PATH, getUserHandler);
+app.get(USER_INVESTMENTS_PATH, getUserInvestmentsHandler);
+app.post(ADD_USER_INVESTMENT_PATH, jsonParser, postAddUserInvestmentHandler);
 
 const wssOptions: ServerOptions = {
   port: 8000,
@@ -19,13 +38,3 @@ const wssOptions: ServerOptions = {
 };
 
 export const WebSocketServerInstance = new WebSocketServer(wssOptions);
-
-initMethods();
-
-APP.listen(Settings.serverPort, Settings.serverUrl, () => {
-  console.log("Success create server");
-  UsersTableManager.createUsersTableIfNotExists();
-  CurrenciesTableManager.createCurrenciesTableIfNotExists();
-  InvestmentsTableManager.createInvestmentsTableIfNotExists();
-  UserInvestmentsManager.createUserPortfolioInvestmentsTableIfNotExists();
-});

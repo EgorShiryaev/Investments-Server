@@ -1,16 +1,16 @@
 import DatabaseManager from "../database_manager";
 import DatabaseSettings from "../../../database_settings";
 import Column from "../models/column";
+import SqlModel from "../models/sql_model";
 
-export interface UserInvestmentSqlModel {
-  id: number;
+export type UserInvestmentSqlModel = {
   investmentId: number;
   userId: number;
-}
+} & SqlModel;
 
 const TABLE_SETTINGS = DatabaseSettings["userInvestmentsTable"];
 
-const createUserPortfolioInvestmentsTableIfNotExists = () => {
+const createTableIfNotExists = () => {
   const columns = TABLE_SETTINGS.columns
     .map((v: Column) => `${v.columnTitle} ${v.type} ${v.limit && v.limit}`)
     .join(", ");
@@ -18,18 +18,14 @@ const createUserPortfolioInvestmentsTableIfNotExists = () => {
   DatabaseManager.createTableIfNotExists(TABLE_SETTINGS.title, columns);
 };
 
-const getUserInvestments = (where: string) => {
-
+const get = (where: string) => {
   return DatabaseManager.getAll<UserInvestmentSqlModel>(
     TABLE_SETTINGS.title,
     where
   );
 };
 
-const createUserPortfolioInvestment = (
-  userId: number,
-  investmentId: number
-) => {
+const create = (userId: number, investmentId: number) => {
   const columns = TABLE_SETTINGS.columns
     .map((v: Column) => v.columnTitle)
     .join(", ");
@@ -38,18 +34,15 @@ const createUserPortfolioInvestment = (
   return DatabaseManager.insert(TABLE_SETTINGS.title, columns, values);
 };
 
-const deleteUserPortfolioInvestment = (
-  userId: string,
-  investmentId: string
-) => {
+const remove = (userId: string, investmentId: string) => {
   const where = `userId = ${userId}, investmentId = ${investmentId}`;
 
   return DatabaseManager.remove(TABLE_SETTINGS.title, where);
 };
 
 export default {
-  createUserPortfolioInvestmentsTableIfNotExists,
-  getUserInvestments,
-  createUserPortfolioInvestment,
-  deleteUserPortfolioInvestment,
+  createTableIfNotExists,
+  get,
+  create,
+  remove,
 };
