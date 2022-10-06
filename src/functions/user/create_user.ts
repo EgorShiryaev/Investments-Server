@@ -1,10 +1,9 @@
 import UserEntity from "../../entities/user_entity";
 import { UsersTableManager } from "../../managers";
-import { UserSqlModel } from "../../managers/table_managers/users_table_manager";
 import { userSqlModelToUserEntity } from "../../utils/sql_model_convector";
-import { getUserSqlModelWhereUuid } from "./get_user";
+import { getUserEntityWhereUuid, getUserSqlModelWhereUuid } from "./get_user";
 
-const createUserEntity = async (uuid: string): Promise<UserEntity> => {
+export const createUserEntity = async (uuid: string): Promise<UserEntity> => {
   await UsersTableManager.create(uuid);
 
   const user = await getUserSqlModelWhereUuid(uuid);
@@ -12,4 +11,19 @@ const createUserEntity = async (uuid: string): Promise<UserEntity> => {
   return userSqlModelToUserEntity(user!);
 };
 
-export default createUserEntity;
+export const createUserEntityIfNotExist = async (
+  userUuid: string
+): Promise<{ user: UserEntity; userAlreadyCreated: boolean }> => {
+  const user = await getUserEntityWhereUuid(userUuid);
+
+  if (user === null) {
+    return {
+      userAlreadyCreated: false,
+      user: await createUserEntity(userUuid),
+    };
+  }
+  return {
+    userAlreadyCreated: true,
+    user: user,
+  };
+};

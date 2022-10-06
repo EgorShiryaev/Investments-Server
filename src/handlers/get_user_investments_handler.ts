@@ -11,10 +11,12 @@ import {
 import getUserInvestmentEntities from "../functions/user_investments/get_user_investment";
 import ServerMethodHandler from "../interfaces/server_method_handler";
 import { getUserUuidHeader } from "../utils/request_parser";
-import { parseToJson } from "../utils/response_convector";
+import { parseToJson, setHeaderContentType } from "../utils/response_convector";
 
 const getUserInvestsHandler: ServerMethodHandler = (request, response) => {
   const userUuid = getUserUuidHeader(request.headers);
+
+  setHeaderContentType(response)
 
   if (userUuid === null) {
     response

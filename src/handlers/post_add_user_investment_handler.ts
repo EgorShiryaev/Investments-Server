@@ -2,14 +2,14 @@ import { USER_UUID_HEADER_NOT_FOUND } from "../constants/errors";
 import {
   BODY_PARAMETR_NOT_FOUND_STATUS,
   SERVER_ERROR_STATUS,
-  SUCCESS_POST_STATUS,
+  SUCCESS_POST_WITH_OUT_CONTENT_STATUS,
   USER_UUID_HEADER_NOT_FOUND_STATUS,
 } from "../constants/response_statuses";
 import InvestmentEntity from "../entities/investment_entity";
 import createUserInvestment from "../functions/user_investments/create_user_investment";
 import ServerMethodHandler from "../interfaces/server_method_handler";
 import { getUserUuidHeader } from "../utils/request_parser";
-import { parseToJson } from "../utils/response_convector";
+import { parseToJson, setHeaderContentType } from "../utils/response_convector";
 
 const checkBodyParameters = (
   investment?: InvestmentEntity
@@ -50,6 +50,8 @@ const postAddUserInvestmentHandler: ServerMethodHandler = (
 ) => {
   const userUuid = getUserUuidHeader(request.headers);
 
+  setHeaderContentType(response);
+
   const { investment } = request.body;
 
   if (userUuid === null) {
@@ -70,7 +72,7 @@ const postAddUserInvestmentHandler: ServerMethodHandler = (
 
   createUserInvestment(userUuid, investment)
     .then(() => {
-      response.status(SUCCESS_POST_STATUS).send();
+      response.status(SUCCESS_POST_WITH_OUT_CONTENT_STATUS).send();
     })
     .catch((error: Error) => {
       response
@@ -79,4 +81,4 @@ const postAddUserInvestmentHandler: ServerMethodHandler = (
     });
 };
 
-export default postAddUserInvestmentHandler
+export default postAddUserInvestmentHandler;
