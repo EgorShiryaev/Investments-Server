@@ -3,6 +3,9 @@ import InvestmentEntity from "../../entities/investment_entity";
 import { UserInvestmentsManager } from "../../managers";
 import { createInvestSqlModelIfNotExist } from "../investment/create_investment";
 import { getUserSqlModelWhereUuid } from "../user/get_user";
+import getUserInvestmentEntities, {
+  checkUserInvestIsExists,
+} from "./get_user_investment";
 
 const createUserInvestment = async (
   userUuid: string,
@@ -14,9 +17,11 @@ const createUserInvestment = async (
     throw Error(USER_NOT_FOUND);
   }
 
-  const investmentSqlModel = await createInvestSqlModelIfNotExist(investment);
+  if (!(await checkUserInvestIsExists(userUuid, investment.prefix))) {
+    const investmentSqlModel = await createInvestSqlModelIfNotExist(investment);
 
-  UserInvestmentsManager.create(userSqlModel.id, investmentSqlModel.id);
+    UserInvestmentsManager.create(userSqlModel.id, investmentSqlModel.id);
+  }
 };
 
 export default createUserInvestment;

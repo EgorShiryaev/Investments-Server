@@ -1,22 +1,18 @@
-import {
-  USER_NOT_FOUND,
-  USER_UUID_HEADER_NOT_FOUND,
-} from "../constants/errors";
+import { USER_UUID_HEADER_NOT_FOUND } from "../constants/errors";
 import {
   SERVER_ERROR_STATUS,
-  SUCCESS_GET_STATUS,
-  USER_NOT_FOUND_STATUS,
+  SUCCESS_POST_WITH_CONTENT_STATUS,
   USER_UUID_HEADER_NOT_FOUND_STATUS,
 } from "../constants/response_statuses";
-import { getUserEntityWhereUuid } from "../functions/user/get_user";
+import { createUserEntityIfNotExist } from "../functions/user/create_user";
 import ServerMethodHandler from "../interfaces/server_method_handler";
 import { getUserUuidHeader } from "../utils/request_parser";
 import { parseToJson, setHeaderContentType } from "../utils/response_convector";
 
-const getUserHandler: ServerMethodHandler = (request, response) => {
+const postUserHandler: ServerMethodHandler = async (request, response) => {
   const userUuid = getUserUuidHeader(request.headers);
 
-  setHeaderContentType(response)
+  setHeaderContentType(response);
 
   if (userUuid === null) {
     response
@@ -25,15 +21,11 @@ const getUserHandler: ServerMethodHandler = (request, response) => {
     return;
   }
 
-  getUserEntityWhereUuid(userUuid)
-    .then((user) => {
-      if (user === null) {
-        response
-          .status(USER_NOT_FOUND_STATUS)
-          .send(parseToJson({ message: USER_NOT_FOUND }));
-      } else {
-        response.status(SUCCESS_GET_STATUS).send(parseToJson({ user: user }));
-      }
+  createUserEntityIfNotExist(userUuid)
+    .then(({ user, userAlreadyCreated }) => {
+      response
+        .status(SUCCESS_POST_WITH_CONTENT_STATUS)
+        .send(parseToJson({ user, userAlreadyCreated }));
     })
     .catch((error: Error) => {
       response
@@ -42,4 +34,4 @@ const getUserHandler: ServerMethodHandler = (request, response) => {
     });
 };
 
-export default getUserHandler;
+export default postUserHandler;
