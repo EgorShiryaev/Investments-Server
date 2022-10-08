@@ -7,8 +7,6 @@ import UserSubscribeInvestmentRepository from "../repositories/user_subscribe_in
 import { getUserUuidGetParams } from "../utils/request_parser";
 import { parseToJson } from "../utils/response_convector";
 
-const timerMs = 2000;
-
 const webSocketQuantitionsHandler = (
   ws: WebSocket.WebSocket,
   request: IncomingMessage
@@ -42,6 +40,8 @@ const messsageHandler = (data: WebSocket.RawData, userUuid: string) => {
     UserSubscribeInvestmentRepository.deleteUserPrefix(userUuid, prefix);
   }
 };
+
+const timerMs = 2000;
 
 const setResponseInterval = (ws: WebSocket.WebSocket, userUuid: string) => {
   return setInterval(() => {
