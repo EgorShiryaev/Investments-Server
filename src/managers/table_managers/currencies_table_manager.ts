@@ -1,8 +1,8 @@
 import DatabaseManager from "../database_manager";
 import DatabaseSettings from "../../../database_settings";
 import CurrencyEntity from "../../entities/currency_entity";
-import Column from "../models/column";
-import SqlModel from "../models/sql_model";
+import Column from "../../models/column";
+import SqlModel from "../../models/sql_model";
 
 export type CurrencySqlModel = CurrencyEntity & SqlModel;
 
