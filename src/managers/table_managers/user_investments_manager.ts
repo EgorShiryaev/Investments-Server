@@ -1,7 +1,7 @@
 import DatabaseManager from "../database_manager";
 import DatabaseSettings from "../../../database_settings";
-import Column from "../models/column";
-import SqlModel from "../models/sql_model";
+import Column from "../../models/column";
+import SqlModel from "../../models/sql_model";
 
 export type UserInvestmentSqlModel = {
   investmentId: number;
