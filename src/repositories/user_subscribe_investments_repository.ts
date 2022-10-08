@@ -42,9 +42,7 @@ const deleteUserPrefix = (userUuid: string, prefix: string) => {
     const newInvestmentsPrefix = [...currentUserInvestmentsPrefix].filter(
       (v) => v !== prefix
     );
-
-    console.log("newInvestmentsPrefix", newInvestmentsPrefix);
-
+    
     userSubscribePrefixesRepository.set(userUuid, newInvestmentsPrefix);
     return;
   }

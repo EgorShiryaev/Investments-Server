@@ -23,38 +23,47 @@ const webSocketQuantitionsHandler = (
     return;
   }
 
-  ws.on("message", (data: WebSocket.RawData) => {
-    console.log("onMessage", userUuid);
+  console.log("connect userUuid:", userUuid);
 
-    //@ts-ignore
-    const { operation, prefix }: WebSocketMessage = JSON.parse(data.toString());
+  ws.on("message", (raw) => messsageHandler(raw, userUuid));
 
-    if (operation === WebSocketOperation.subscribe) {
-      UserSubscribeInvestmentRepository.addUserPrefix(userUuid, prefix);
-    } else if (operation === WebSocketOperation.unsubscribe) {
-      UserSubscribeInvestmentRepository.deleteUserPrefix(userUuid, prefix);
-    }
-  });
+  const responseInterval = setResponseInterval(ws, userUuid);
 
-  const interval = setInterval(() => {
+  ws.on("close", () => closeHandler(ws, responseInterval, userUuid));
+};
+
+const messsageHandler = (data: WebSocket.RawData, userUuid: string) => {
+  //@ts-ignore
+  const { operation, prefix }: WebSocketMessage = JSON.parse(data.toString());
+
+  if (operation === WebSocketOperation.subscribe) {
+    UserSubscribeInvestmentRepository.addUserPrefix(userUuid, prefix);
+  } else if (operation === WebSocketOperation.unsubscribe) {
+    UserSubscribeInvestmentRepository.deleteUserPrefix(userUuid, prefix);
+  }
+};
+
+const setResponseInterval = (ws: WebSocket.WebSocket, userUuid: string) => {
+  return setInterval(() => {
     const quotations = UserSubscribeInvestmentRepository.getUserPrefixes(
       userUuid
     ).map((v) => ({
       prefix: v,
       price: Math.random(),
     }));
-    console.log("send", userUuid, quotations);
     ws.send(parseToJson({ quotations: quotations }));
   }, timerMs);
+};
 
-  ws.on("close", () => {
-    console.log("onClose", userUuid);
-    UserSubscribeInvestmentRepository.deleteAllUserPrefixes(userUuid);
-    clearInterval(interval);
-  });
-
-  const statusResponse = parseToJson({ status: "success" });
-  ws.send(statusResponse);
+const closeHandler = (
+  ws: WebSocket.WebSocket,
+  interval: NodeJS.Timer,
+  userUuid: string
+) => {
+  console.log("close userUuid:", userUuid);
+  UserSubscribeInvestmentRepository.deleteAllUserPrefixes(userUuid);
+  clearInterval(interval);
+  ws.close();
 };
 
 export default webSocketQuantitionsHandler;
