@@ -24,7 +24,7 @@ const create = (investment: InvestmentEntity, currencyId: number) => {
   const columns = TABLE_SETTINGS.columns
     .map((v: Column) => v.columnTitle)
     .join(", ");
-  const values = `"${investment.ticker}", "${investment.title}", ${currencyId}`;
+  const values = `"${investment.ticker}", "${investment.figi}", "${investment.title}", ${currencyId}`;
 
   return DatabaseManager.insert(TABLE_SETTINGS.title, columns, values);
 };

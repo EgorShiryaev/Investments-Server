@@ -33,6 +33,11 @@
         "limit": "NOT NULL"
       },
       {
+        "columnTitle": "figi",
+        "type": "TEXT",
+        "limit": "NOT NULL"
+      },
+      {
         "columnTitle": "title",
         "type": "TEXT",
         "limit": "NOT NULL"

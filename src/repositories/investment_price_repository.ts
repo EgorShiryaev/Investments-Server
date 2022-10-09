@@ -1,11 +1,11 @@
-const investmentPriceRepository = new Map<string, number>();
+const investmentFigiPriceRepository = new Map<string, number>();
 
-const updatePrice = (ticker: string, price: number) => {
-  investmentPriceRepository.set(ticker, price);
+const updatePrice = (figi: string, price: number) => {
+  investmentFigiPriceRepository.set(figi, price);
 };
 
-const getPrice = (ticker: string) => {
-  const price = investmentPriceRepository.get(ticker);
+const getPrice = (figi: string) => {
+  const price = investmentFigiPriceRepository.get(figi);
 
   return price ?? null;
 };
