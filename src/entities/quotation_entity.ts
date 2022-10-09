@@ -1,5 +1,5 @@
 interface QuotationEntity {
-  prefix: string;
+  ticker: string;
   price: number;
 }
 

@@ -1,10 +1,6 @@
-import DatabaseManager from "../database_manager";
-import DatabaseSettings from "../../../database_settings";
-import UserEntity from "../../entities/user_entity";
-import Column from "../../models/column";
-import SqlModel from "../../models/sql_model";
-
-export type UserSqlModel = UserEntity & SqlModel;
+import DatabaseSettings from "../../database_settings";
+import { Column, UserSqlModel, } from "../models";
+import DatabaseManager from "./database_manager";
 
 const TABLE_SETTINGS = DatabaseSettings["usersTable"];
 

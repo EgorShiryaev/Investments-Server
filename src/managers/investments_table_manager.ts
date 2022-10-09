@@ -1,14 +1,7 @@
-import DatabaseManager from "../database_manager";
-import DatabaseSettings from "../../../database_settings";
-import InvestmentEntity from "../../entities/investment_entity";
-import Column from "../../models/column";
-import SqlModel from "../../models/sql_model";
-
-export type InvestmentSqlModel = {
-  prefix: string;
-  title: string;
-  currencyId: number;
-} & SqlModel;
+import DatabaseSettings from "../../database_settings";
+import { InvestmentEntity } from "../entities";
+import { Column, InvestmentSqlModel } from "../models";
+import DatabaseManager from "./database_manager";
 
 const TABLE_SETTINGS = DatabaseSettings["investmentsTable"];
 
@@ -31,7 +24,7 @@ const create = (investment: InvestmentEntity, currencyId: number) => {
   const columns = TABLE_SETTINGS.columns
     .map((v: Column) => v.columnTitle)
     .join(", ");
-  const values = `"${investment.prefix}", "${investment.title}", ${currencyId}`;
+  const values = `"${investment.ticker}", "${investment.title}", ${currencyId}`;
 
   return DatabaseManager.insert(TABLE_SETTINGS.title, columns, values);
 };

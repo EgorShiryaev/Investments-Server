@@ -1,12 +1,10 @@
-import { getUserSqlModelWhereUuid } from "../user/get_user";
-import { getInvestmentSqlModelWhereId } from "../investment/get_investment";
-import { getCurrencyEntityWhereId } from "../currency/get_currency";
-import InvestmentEntity from "../../entities/investment_entity";
-import { USER_NOT_FOUND } from "../../constants/errors";
+import { USER_NOT_FOUND } from "../../constants";
+import { InvestmentEntity } from "../../entities";
 import { UserInvestmentsManager } from "../../managers";
 import { investmentSqlModelToInvestEntity } from "../../utils/sql_model_convector";
-import CurrencyEntity from "../../entities/currency_entity";
-import { InvestmentSqlModel } from "../../managers/table_managers/investments_table_manager";
+import { getInvestmentSqlModelWhereId } from "../investment/get_investment";
+import { getUserSqlModelWhereUuid } from "../user/get_user";
+
 
 export const getUserInvestmentEntities = async (
   userUuid: string
@@ -19,13 +17,12 @@ export const getUserInvestmentEntities = async (
 
   const rows = await UserInvestmentsManager.get(`userId = ${user.id}`);
 
-  const investmentSqlModelsOrNullArray = await Promise.all(
-    rows.map(async (v) => await getInvestmentSqlModelWhereId(v.investmentId))
-  );
-
   //@ts-ignore
-  const investmentSqlModels: InvestmentSqlModel[] =
-    investmentSqlModelsOrNullArray.filter((v) => v !== null);
+  const investmentSqlModels: InvestmentSqlModel[] = (
+    await Promise.all(
+      rows.map(async (v) => await getInvestmentSqlModelWhereId(v.investmentId))
+    )
+  ).filter((v) => v !== null);
 
   const investments: InvestmentEntity[] = await Promise.all(
     investmentSqlModels.map(async (v) => {
@@ -43,7 +40,7 @@ export const getUserInvestmentEntities = async (
 
 export const checkUserInvestIsExists = async (
   userUuid: string,
-  investmentPrefix: string
+  investmentTicker: string
 ): Promise<boolean> => {
   const user = await getUserSqlModelWhereUuid(userUuid);
 
@@ -53,19 +50,15 @@ export const checkUserInvestIsExists = async (
 
   const rows = await UserInvestmentsManager.get(`userId = ${user.id}`);
 
-  const investmentSqlModelsOrNullArray = await Promise.all(
+  //@ts-ignore
+  const investmentSqlModels: InvestmentSqlModel[] = await Promise.all(
     rows.map(async (v) => await getInvestmentSqlModelWhereId(v.investmentId))
   );
 
-  //@ts-ignore
-  const investmentSqlModels: InvestmentSqlModel[] =
-    investmentSqlModelsOrNullArray.filter((v) => v !== null);
-
   const isExist = !!investmentSqlModels.filter(
-    (v) => v.prefix === investmentPrefix
+    (v) => v.ticker === investmentTicker
   ).length;
 
   return isExist;
 };
 
-export default getUserInvestmentEntities;

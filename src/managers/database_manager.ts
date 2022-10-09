@@ -1,6 +1,6 @@
 import { RunResult } from "sqlite3";
 import DATABASE from "../database";
-import DatabaseResponse from "../models/database_response";
+import { DatabaseResponse } from "../models";
 
 const createTableIfNotExists = (tableTitle: string, columns: string) => {
   const sqlScript = `CREATE TABLE IF NOT EXISTS ${tableTitle} (id INTEGER NOT NULL, ${columns}, PRIMARY KEY (id))`;
@@ -56,7 +56,7 @@ const update = (
   tableTitle: string,
   set: string,
   where: string
-): Promise<DatabaseResponse>  => {
+): Promise<DatabaseResponse> => {
   const sqlScript = `UPDATE ${tableTitle} SET ${set} WHERE ${where}`;
   console.log(sqlScript);
 
@@ -77,7 +77,7 @@ const update = (
 const remove = (
   tableTitle: string,
   where: string
-): Promise<DatabaseResponse>  => {
+): Promise<DatabaseResponse> => {
   const sqlScript = `DELETE ${tableTitle} WHERE ${where}`;
   console.log(sqlScript);
 

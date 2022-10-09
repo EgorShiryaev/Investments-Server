@@ -1,43 +1,35 @@
-import {
-  USER_NOT_FOUND,
-  USER_UUID_HEADER_NOT_FOUND,
-} from "../constants/errors";
-import {
-  SERVER_ERROR_STATUS,
-  SUCCESS_GET_STATUS,
-  USER_NOT_FOUND_STATUS,
-  USER_UUID_HEADER_NOT_FOUND_STATUS,
-} from "../constants/response_statuses";
-import getUserInvestmentEntities from "../functions/user_investments/get_user_investment";
+import { USER_NOT_FOUND } from "../constants";
+import { getUserInvestmentEntities } from "../functions";
 import ServerMethodHandler from "../interfaces/server_method_handler";
 import { getUserUuidHeader } from "../utils/request_parser";
-import { parseToJson, setHeaderContentType } from "../utils/response_convector";
+import { setHeaderContentType } from "../utils/response_convector";
+import {
+  sendGetSuccessResponse,
+  sendServerErrorResponse,
+  sendUserNotFoundResponse,
+  sendUserUuidHeaderNotFoundResponse,
+} from "../utils/send_response_helper";
 
 const getUserInvestsHandler: ServerMethodHandler = (request, response) => {
   const userUuid = getUserUuidHeader(request.headers);
 
-  setHeaderContentType(response)
+  setHeaderContentType(response);
 
   if (userUuid === null) {
-    response
-      .status(USER_UUID_HEADER_NOT_FOUND_STATUS)
-      .send(parseToJson({ message: USER_UUID_HEADER_NOT_FOUND }));
+    sendUserUuidHeaderNotFoundResponse(response);
     return;
   }
 
   getUserInvestmentEntities(userUuid)
     .then((investments) => {
-      response
-        .status(SUCCESS_GET_STATUS)
-        .send(parseToJson({ investments: investments }));
+      sendGetSuccessResponse(response, { investments: investments });
     })
     .catch((error: Error) => {
       if (error.message === USER_NOT_FOUND) {
-        response.status(USER_NOT_FOUND_STATUS);
+        sendUserNotFoundResponse(response);
       } else {
-        response.status(SERVER_ERROR_STATUS);
+        sendServerErrorResponse(response, error);
       }
-      response.send(parseToJson({ message: error.message }));
     });
 };
 
