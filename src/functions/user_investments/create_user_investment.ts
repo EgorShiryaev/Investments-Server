@@ -1,11 +1,9 @@
-import { USER_NOT_FOUND } from "../../constants/errors";
-import InvestmentEntity from "../../entities/investment_entity";
+import { USER_NOT_FOUND } from "../../constants";
+import { InvestmentEntity } from "../../entities";
 import { UserInvestmentsManager } from "../../managers";
 import { createInvestSqlModelIfNotExist } from "../investment/create_investment";
 import { getUserSqlModelWhereUuid } from "../user/get_user";
-import getUserInvestmentEntities, {
-  checkUserInvestIsExists,
-} from "./get_user_investment";
+import { checkUserInvestIsExists } from "./get_user_investment";
 
 const createUserInvestment = async (
   userUuid: string,
@@ -17,7 +15,7 @@ const createUserInvestment = async (
     throw Error(USER_NOT_FOUND);
   }
 
-  if (!(await checkUserInvestIsExists(userUuid, investment.prefix))) {
+  if (!(await checkUserInvestIsExists(userUuid, investment.ticker))) {
     const investmentSqlModel = await createInvestSqlModelIfNotExist(investment);
 
     UserInvestmentsManager.create(userSqlModel.id, investmentSqlModel.id);

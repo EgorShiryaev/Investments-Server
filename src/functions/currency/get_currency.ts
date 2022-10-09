@@ -1,6 +1,6 @@
-import CurrencyEntity from "../../entities/currency_entity";
+import { CurrencyEntity } from "../../entities";
 import { CurrenciesTableManager } from "../../managers";
-import { CurrencySqlModel } from "../../managers/table_managers/currencies_table_manager";
+import { CurrencySqlModel } from "../../models";
 import { currencySqlModelToCurrencyEntity } from "../../utils/sql_model_convector";
 
 const getCurrencySqlModelWhere = async (
@@ -8,11 +8,7 @@ const getCurrencySqlModelWhere = async (
 ): Promise<CurrencySqlModel | null> => {
   const rows = await CurrenciesTableManager.get(where);
 
-  if (rows.length) {
-    const currency = rows[0];
-    return currency;
-  }
-  return null;
+  return rows.length ? rows[0] : null;
 };
 
 export const getCurrencySqlModelWhereId = (
@@ -26,7 +22,6 @@ export const getCurrencySqlModelWhereCode = (
 ): Promise<CurrencySqlModel | null> => {
   return getCurrencySqlModelWhere(`code = "${code}"`);
 };
-
 
 export const getCurrencyEntityWhereId = async (
   id: number

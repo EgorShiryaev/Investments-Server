@@ -1,8 +1,8 @@
-import InvestmentEntity from "../../entities/investment_entity";
+import { InvestmentEntity } from "../../entities";
 import { InvestmentsTableManager } from "../../managers";
-import { InvestmentSqlModel } from "../../managers/table_managers/investments_table_manager";
+import { InvestmentSqlModel } from "../../models";
 import { createCurrencySqlModelIfNotExist } from "../currency/create_currency";
-import { getInvestmentSqlModelWherePrefix } from "./get_investment";
+import { getInvestmentSqlModelWhereTicker } from "./get_investment";
 
 export const createInvestmentSqlModel = async (
   investmentInfo: InvestmentEntity
@@ -13,19 +13,16 @@ export const createInvestmentSqlModel = async (
 
   await InvestmentsTableManager.create(investmentInfo, currency.id);
 
-  const invest = await getInvestmentSqlModelWherePrefix(investmentInfo.prefix);
+  const invest = await getInvestmentSqlModelWhereTicker(investmentInfo.ticker);
   return invest!;
 };
 
 export const createInvestSqlModelIfNotExist = async (
   investmentInfo: InvestmentEntity
 ): Promise<InvestmentSqlModel> => {
-  const investment = await getInvestmentSqlModelWherePrefix(
-    investmentInfo.prefix
+  const investment = await getInvestmentSqlModelWhereTicker(
+    investmentInfo.ticker
   );
 
-  if (investment === null) {
-    return await createInvestmentSqlModel(investmentInfo);
-  }
-  return investment;
+  return investment ?? (await createInvestmentSqlModel(investmentInfo));
 };

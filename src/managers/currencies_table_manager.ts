@@ -1,10 +1,7 @@
-import DatabaseManager from "../database_manager";
-import DatabaseSettings from "../../../database_settings";
-import CurrencyEntity from "../../entities/currency_entity";
-import Column from "../../models/column";
-import SqlModel from "../../models/sql_model";
-
-export type CurrencySqlModel = CurrencyEntity & SqlModel;
+import DatabaseSettings from "../../database_settings";
+import { CurrencyEntity } from "../entities";
+import { Column, CurrencySqlModel } from "../models";
+import DatabaseManager from "./database_manager";
 
 const TABLE_SETTINGS = DatabaseSettings["currenciesTable"];
 

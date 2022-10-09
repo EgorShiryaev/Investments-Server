@@ -1,17 +1,16 @@
 const investmentPriceRepository = new Map<string, number>();
 
-export const updatePrice = (prefix: string, price: number) => {
-  investmentPriceRepository.set(prefix, price);
+const updatePrice = (ticker: string, price: number) => {
+  investmentPriceRepository.set(ticker, price);
 };
 
-export const gerPrice = (prefix: string) => {
-  const price = investmentPriceRepository.get(prefix);
+const getPrice = (ticker: string) => {
+  const price = investmentPriceRepository.get(ticker);
 
   return price ?? null;
 };
 
-export const getPriceWithPrefix = (prefixes: string[]) => {
-  const investments = prefixes.map((v) => ({ prefix: v, price: gerPrice(v) }));
-
-  return investments;
+export default {
+  updatePrice,
+  getPrice,
 };

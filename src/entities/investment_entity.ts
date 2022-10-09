@@ -1,7 +1,7 @@
 import CurrencyEntity from "./currency_entity";
 
 interface InvestmentEntity {
-  prefix: string;
+  ticker: string;
   title: string;
   currency: CurrencyEntity;
 }

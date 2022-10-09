@@ -1,11 +1,9 @@
 import { IncomingMessage } from "http";
 import WebSocket from "ws";
-import WebSocketMessage, {
-  WebSocketOperation,
-} from "../models/websocket_message";
-import UserSubscribeInvestmentRepository from "../repositories/user_subscribe_investments_repository";
+import { WebSocketOperation } from "../models";
 import { getUserUuidGetParams } from "../utils/request_parser";
 import { parseToJson } from "../utils/response_convector";
+import { UserSubscribeTickersRepository } from "../repositories";
 
 const webSocketQuantitionsHandler = (
   ws: WebSocket.WebSocket,
@@ -32,12 +30,12 @@ const webSocketQuantitionsHandler = (
 
 const messsageHandler = (data: WebSocket.RawData, userUuid: string) => {
   //@ts-ignore
-  const { operation, prefix }: WebSocketMessage = JSON.parse(data.toString());
+  const { operation, ticker }: WebSocketMessage = JSON.parse(data.toString());
 
   if (operation === WebSocketOperation.subscribe) {
-    UserSubscribeInvestmentRepository.addUserPrefix(userUuid, prefix);
+    UserSubscribeTickersRepository.addUserTicker(userUuid, ticker);
   } else if (operation === WebSocketOperation.unsubscribe) {
-    UserSubscribeInvestmentRepository.deleteUserPrefix(userUuid, prefix);
+    UserSubscribeTickersRepository.deleteUserTicker(userUuid, ticker);
   }
 };
 
@@ -45,10 +43,10 @@ const timerMs = 2000;
 
 const setResponseInterval = (ws: WebSocket.WebSocket, userUuid: string) => {
   return setInterval(() => {
-    const quotations = UserSubscribeInvestmentRepository.getUserPrefixes(
+    const quotations = UserSubscribeTickersRepository.getUserTickers(
       userUuid
     ).map((v) => ({
-      prefix: v,
+      ticker: v,
       price: Math.random(),
     }));
     ws.send(parseToJson({ quotations: quotations }));
@@ -61,7 +59,7 @@ const closeHandler = (
   userUuid: string
 ) => {
   console.log("close userUuid:", userUuid);
-  UserSubscribeInvestmentRepository.deleteAllUserPrefixes(userUuid);
+  UserSubscribeTickersRepository.deleteAllUserTickers(userUuid);
   clearInterval(interval);
   ws.close();
 };

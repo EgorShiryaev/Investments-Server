@@ -28,7 +28,7 @@
     "title": "Investments",
     "columns": [
       {
-        "columnTitle": "prefix",
+        "columnTitle": "ticker",
         "type": "TEXT",
         "limit": "NOT NULL"
       },

@@ -1,16 +1,12 @@
-import UserEntity from "../../entities/user_entity";
+import { UserEntity } from "../../entities";
 import { UsersTableManager } from "../../managers";
-import { UserSqlModel } from "../../managers/table_managers/users_table_manager";
+import { UserSqlModel } from "../../models";
 import { userSqlModelToUserEntity } from "../../utils/sql_model_convector";
 
 const getUserSqlModel = async (where: string): Promise<UserSqlModel | null> => {
   const rows = await UsersTableManager.get(where);
 
-  if (rows.length) {
-    const user = rows[0];
-    return user;
-  }
-  return null;
+  return rows.length ? rows[0] : null;
 };
 
 export const getUserSqlModelWhereUuid = (

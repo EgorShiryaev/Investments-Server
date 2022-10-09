@@ -1,9 +1,5 @@
-import { CurrencySqlModel } from "../managers/table_managers/currencies_table_manager";
-import { InvestmentSqlModel } from "../managers/table_managers/investments_table_manager";
-import InvestmentEntity from "../entities/investment_entity";
-import CurrencyEntity from "../entities/currency_entity";
-import UserEntity from "../entities/user_entity";
-import { UserSqlModel } from "../managers/table_managers/users_table_manager";
+import { CurrencyEntity, InvestmentEntity, UserEntity } from "../entities";
+import { CurrencySqlModel, InvestmentSqlModel, UserSqlModel } from "../models";
 
 const emptyIdAttribute = { id: undefined };
 

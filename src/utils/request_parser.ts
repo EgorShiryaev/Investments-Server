@@ -1,11 +1,10 @@
 import { IncomingHttpHeaders } from "http";
-
-const USER_UUID_KEY = "user-uuid";
+import { USER_UUID_PARAMETER_KEY } from "../constants";
 
 export const getUserUuidHeader = (
   headers: IncomingHttpHeaders
 ): string | null => {
-  const userUuid = headers[USER_UUID_KEY];
+  const userUuid = headers[USER_UUID_PARAMETER_KEY];
   if (userUuid === undefined) {
     return null;
   }
@@ -29,5 +28,5 @@ export const getUserUuidGetParams = (url?: string): string | null => {
     paramsMap.set(key, value);
   });
 
-  return paramsMap.get("userUuid") ?? null;
+  return paramsMap.get(USER_UUID_PARAMETER_KEY) ?? null;
 };
