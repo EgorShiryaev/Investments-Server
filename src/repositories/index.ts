@@ -1,4 +1,7 @@
 import InvestmentPriceRepository from "./investment_price_repository";
-import UserSubscribeTickersRepository from "./user_subscribe_tickers_repository";
+import userSubscribeInvestmentFigisRepository from "./user_subscribe_investment_figis_repository";
 
-export { InvestmentPriceRepository, UserSubscribeTickersRepository };
+export {
+  InvestmentPriceRepository,
+  userSubscribeInvestmentFigisRepository,
+};

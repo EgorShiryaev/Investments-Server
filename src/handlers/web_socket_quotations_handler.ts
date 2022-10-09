@@ -3,7 +3,7 @@ import WebSocket from "ws";
 import { WebSocketOperation } from "../models";
 import { getUserUuidGetParams } from "../utils/request_parser";
 import { parseToJson } from "../utils/response_convector";
-import { UserSubscribeTickersRepository } from "../repositories";
+import { userSubscribeInvestmentFigisRepository } from "../repositories";
 
 const webSocketQuantitionsHandler = (
   ws: WebSocket.WebSocket,
@@ -30,12 +30,18 @@ const webSocketQuantitionsHandler = (
 
 const messsageHandler = (data: WebSocket.RawData, userUuid: string) => {
   //@ts-ignore
-  const { operation, ticker }: WebSocketMessage = JSON.parse(data.toString());
+  const { operation, figi }: WebSocketMessage = JSON.parse(data.toString());
 
   if (operation === WebSocketOperation.subscribe) {
-    UserSubscribeTickersRepository.addUserTicker(userUuid, ticker);
+    userSubscribeInvestmentFigisRepository.addUserInvestmentFigi(
+      userUuid,
+      figi
+    );
   } else if (operation === WebSocketOperation.unsubscribe) {
-    UserSubscribeTickersRepository.deleteUserTicker(userUuid, ticker);
+    userSubscribeInvestmentFigisRepository.deleteUserInvestmentFigi(
+      userUuid,
+      figi
+    );
   }
 };
 
@@ -43,12 +49,12 @@ const timerMs = 2000;
 
 const setResponseInterval = (ws: WebSocket.WebSocket, userUuid: string) => {
   return setInterval(() => {
-    const quotations = UserSubscribeTickersRepository.getUserTickers(
-      userUuid
-    ).map((v) => ({
-      ticker: v,
-      price: Math.random(),
-    }));
+    const quotations = userSubscribeInvestmentFigisRepository
+      .getUserInvestmentFigis(userUuid)
+      .map((v) => ({
+        ticker: v,
+        price: Math.random(),
+      }));
     ws.send(parseToJson({ quotations: quotations }));
   }, timerMs);
 };
@@ -59,7 +65,7 @@ const closeHandler = (
   userUuid: string
 ) => {
   console.log("close userUuid:", userUuid);
-  UserSubscribeTickersRepository.deleteAllUserTickers(userUuid);
+  userSubscribeInvestmentFigisRepository.deleteAllUserInvestmentFigis(userUuid);
   clearInterval(interval);
   ws.close();
 };

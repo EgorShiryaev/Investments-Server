@@ -19,7 +19,7 @@ import {
   UserInvestmentsManager,
   UsersTableManager,
 } from "./managers";
-import webSocketServerOptions from "./server/websocket_server_options";
+import webSocketServerOptions from "./configs/web_socket_server_options";
 
 const app = express();
 const jsonParser = express.json();
