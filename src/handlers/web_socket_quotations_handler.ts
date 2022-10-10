@@ -3,7 +3,11 @@ import WebSocket from "ws";
 import { WebSocketOperation } from "../models";
 import { getUserUuidGetParams } from "../utils/request_parser";
 import { parseToJson } from "../utils/response_convector";
-import { userSubscribeInvestmentFigisRepository } from "../repositories";
+import {
+  investmentFigiPriceRepository,
+  userSubscribeInvestmentFigisRepository,
+} from "../repositories";
+import { QuotationEntity } from "../entities";
 
 const webSocketQuantitionsHandler = (
   ws: WebSocket.WebSocket,
@@ -49,12 +53,19 @@ const timerMs = 2000;
 
 const setResponseInterval = (ws: WebSocket.WebSocket, userUuid: string) => {
   return setInterval(() => {
-    const quotations = userSubscribeInvestmentFigisRepository
+    //@ts-ignore
+    const quotations: QuotationEntity[] = userSubscribeInvestmentFigisRepository
       .getUserInvestmentFigis(userUuid)
-      .map((v) => ({
-        ticker: v,
-        price: Math.random(),
-      }));
+      .map((v) => {
+        const price = investmentFigiPriceRepository.getPrice(v);
+        if (price !== null) {
+          return {
+            figi: v,
+            price: price,
+          };
+        }
+      })
+      .filter((v) => v !== null);
     ws.send(parseToJson({ quotations: quotations }));
   }, timerMs);
 };

@@ -1,39 +1,39 @@
-import FigiNumberOfSubscriptionsRepository from "./figi_number_of_subscriptions_repository";
+import investmentFigiNumberOfSubscriptionsRepository from "./investment_figi_number_of_subscriptions_repository";
 
 const userSubscribeInvestmentFigisRepository = new Map<string, string[]>();
 
 const getUserInvestmentFigis = (userUuid: string) => {
-  const investmentsTickers =
+  const userInvestmentFigis =
     userSubscribeInvestmentFigisRepository.get(userUuid);
 
-  return investmentsTickers ?? [];
+  return userInvestmentFigis ?? [];
 };
 
 const addUserInvestmentFigi = (userUuid: string, figi: string) => {
-  FigiNumberOfSubscriptionsRepository.incrementSubscribtion(figi);
+  investmentFigiNumberOfSubscriptionsRepository.incrementSubscribtion(figi);
 
-  const currentUserTickers =
+  const currentUserFigis =
     userSubscribeInvestmentFigisRepository.get(userUuid);
 
-  if (!currentUserTickers) {
+  if (!currentUserFigis) {
     userSubscribeInvestmentFigisRepository.set(userUuid, [figi]);
     return;
-  } else if (currentUserTickers.includes(figi)) {
+  } else if (currentUserFigis.includes(figi)) {
     return;
   }
-  const newUserTickers = [...currentUserTickers, figi];
-  userSubscribeInvestmentFigisRepository.set(userUuid, newUserTickers);
+  const newUserFigis = [...currentUserFigis, figi];
+  userSubscribeInvestmentFigisRepository.set(userUuid, newUserFigis);
 };
 
 const deleteUserInvestmentFigi = (userUuid: string, figi: string) => {
-  FigiNumberOfSubscriptionsRepository.decrementSubscribtion(figi);
-  const currentUserTickers =
+  investmentFigiNumberOfSubscriptionsRepository.decrementSubscribtion(figi);
+  const currentUserFigis =
     userSubscribeInvestmentFigisRepository.get(userUuid);
 
-  if (currentUserTickers) {
-    const newUserTickers = [...currentUserTickers].filter((v) => v !== figi);
+  if (currentUserFigis) {
+    const newUserFigis = [...currentUserFigis].filter((v) => v !== figi);
 
-    userSubscribeInvestmentFigisRepository.set(userUuid, newUserTickers);
+    userSubscribeInvestmentFigisRepository.set(userUuid, newUserFigis);
     return;
   }
 };

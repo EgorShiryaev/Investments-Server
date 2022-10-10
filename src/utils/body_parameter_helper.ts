@@ -10,6 +10,9 @@ export const checkAddUserInvestmentBodyParameteres = (
   if (!investment.ticker) {
     parametersNotFound.push("investment.ticker");
   }
+  if (!investment.figi) {
+    parametersNotFound.push("investment.figi");
+  }
   if (!investment.title) {
     parametersNotFound.push("investment.title");
   }
