@@ -1,5 +1,5 @@
 interface QuotationEntity {
-  ticker: string;
+  figi: string;
   price: number;
 }
 
