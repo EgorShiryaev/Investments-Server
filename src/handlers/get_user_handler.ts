@@ -1,34 +1,35 @@
-import { getUserEntityWhereUuid } from "../functions";
+import {
+  USER_NOT_FOUND,
+  USER_UUID_HEADER_NOT_FOUND,
+} from "../constants/errors";
+import getUser from "../functions/get_user";
 import ServerMethodHandler from "../interfaces/server_method_handler";
 import { getUserUuidHeader } from "../utils/request_parser";
-import { setHeaderContentType } from "../utils/response_convector";
 import {
-  sendGetSuccessResponse,
+  sendNotFoundResponse,
+  sendParameterNotFoundResponse,
   sendServerErrorResponse,
-  sendUserNotFoundResponse,
-  sendUserUuidHeaderNotFoundResponse,
+  sendSuccessResponse,
 } from "../utils/send_response_helper";
 
 const getUserHandler: ServerMethodHandler = (request, response) => {
   const userUuid = getUserUuidHeader(request.headers);
 
-  setHeaderContentType(response);
-
   if (userUuid === null) {
-    sendUserUuidHeaderNotFoundResponse(response);
+    sendParameterNotFoundResponse(response, USER_UUID_HEADER_NOT_FOUND);
     return;
   }
 
-  getUserEntityWhereUuid(userUuid)
+  getUser(userUuid)
     .then((user) => {
-      if (user === null) {
-        sendUserNotFoundResponse(response);
-      } else {
-        sendGetSuccessResponse(response, { user: user });
-      }
+      sendSuccessResponse(response, { user: user });
     })
     .catch((error: Error) => {
-      sendServerErrorResponse(response, error);
+      if (error.message === USER_NOT_FOUND) {
+        sendNotFoundResponse(response, error.message);
+      } else {
+        sendServerErrorResponse(response, error.message);
+      }
     });
 };
 

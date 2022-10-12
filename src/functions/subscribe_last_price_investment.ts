@@ -2,8 +2,10 @@ import {
   SubscribeLastPriceRequest,
   SubscriptionAction,
 } from "tinkoff-invest-api/cjs/generated/marketdata";
-import lastPriceHandler from "../handlers/last_price_handler";
+import { investmentFigiPriceRepository } from "../repositories";
+
 import TINKOFF_INVEST_API from "../tinkoff_invest_api";
+import { getPrice } from "../utils/tinkoff_invest_api_utils";
 
 const subscribeLastPriceInvestment = (figi: string) => {
   const request: SubscribeLastPriceRequest = {
@@ -15,7 +17,13 @@ const subscribeLastPriceInvestment = (figi: string) => {
     subscriptionAction: SubscriptionAction.SUBSCRIPTION_ACTION_SUBSCRIBE,
   };
 
-  TINKOFF_INVEST_API.stream.market.lastPrice(request, lastPriceHandler);
+  TINKOFF_INVEST_API.stream.market.lastPrice(request, (lastPrice) => {
+    const price = getPrice(lastPrice.price);
+
+    if (price) {
+      investmentFigiPriceRepository.updatePrice(lastPrice.figi, price);
+    }
+  });
 };
 
 export default subscribeLastPriceInvestment;

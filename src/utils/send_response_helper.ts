@@ -1,52 +1,35 @@
 import { Response } from "express";
 import {
-  BODY_PARAMETER_NOT_FOUND_STATUS,
+  NOT_FOUND_STATUS,
+  PARAMETER_NOT_FOUND_STATUS,
   SERVER_ERROR_STATUS,
-  SUCCESS_GET_STATUS,
-  SUCCESS_POST_STATUS,
-  SUCCESS_POST_WITH_OUT_CONTENT_STATUS,
-  USER_NOT_FOUND,
-  USER_NOT_FOUND_STATUS,
-  USER_UUID_HEADER_NOT_FOUND,
-  USER_UUID_HEADER_NOT_FOUND_STATUS,
-} from "../constants";
-import { parseToJson } from "./response_convector";
+  SUCCESS_STATUS,
+} from "../constants/response_statuses";
+import { parseToJson } from "./request_parser";
 
-export const sendUserUuidHeaderNotFoundResponse = (response: Response) => {
-  response
-    .status(USER_UUID_HEADER_NOT_FOUND_STATUS)
-    .send(parseToJson({ message: USER_UUID_HEADER_NOT_FOUND }));
+const sendResponse = (response: Response, status: number, body: object) => {
+  response.header("content-type", "application/json");
+  response.status(status).send(parseToJson(body));
 };
 
-export const sendUserNotFoundResponse = (response: Response) => {
-  response
-    .status(USER_NOT_FOUND_STATUS)
-    .send(parseToJson({ message: USER_NOT_FOUND }));
+export const sendNotFoundResponse = (response: Response, message: string) => {
+  sendResponse(response, NOT_FOUND_STATUS, { message: message });
 };
 
-export const sendGetSuccessResponse = (response: Response, body: object) => {
-  response.status(SUCCESS_GET_STATUS).send(parseToJson(body));
-};
-
-export const sendServerErrorResponse = (response: Response, error: Error) => {
-  response
-    .status(SERVER_ERROR_STATUS)
-    .send(parseToJson({ message: error.message }));
-};
-
-export const sendBodyParametersNotFoundResponse = (
+export const sendServerErrorResponse = (
   response: Response,
   message: string
 ) => {
-  response
-    .status(BODY_PARAMETER_NOT_FOUND_STATUS)
-    .send(parseToJson({ message: message }));
+  sendResponse(response, SERVER_ERROR_STATUS, { message: message });
 };
 
-export const sendPostSuccessWithOutContentResponse = (response: Response) => {
-  response.status(SUCCESS_POST_WITH_OUT_CONTENT_STATUS).send();
+export const sendParameterNotFoundResponse = (
+  response: Response,
+  message: string
+) => {
+  sendResponse(response, PARAMETER_NOT_FOUND_STATUS, { message: message });
 };
 
-export const sendPostSuccessResponse = (response: Response, body: object) => {
-  response.status(SUCCESS_POST_STATUS).send(parseToJson(body));
+export const sendSuccessResponse = (response: Response, body: object) => {
+  sendResponse(response, SUCCESS_STATUS, body);
 };
