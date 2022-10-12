@@ -1,5 +1,5 @@
-import subscribeLastPriceInvestment from "../functions/subscribe_last_price_investment";
-import unsubscribeLastPriceInvestment from "../functions/unsubscribe_last_price_investment";
+import subscribeLastPriceInvestment from "../usecases/subscribe_last_price_investment";
+import unsubscribeLastPriceInvestment from "../usecases/unsubscribe_last_price_investment";
 
 const investmentFigiNumberOfSubscriptionsRepository = new Map<string, number>();
 

@@ -2,8 +2,8 @@ import {
   USER_NOT_FOUND,
   USER_UUID_HEADER_NOT_FOUND,
 } from "../constants/errors";
-import getUser from "../usecases/get_user";
 import ServerMethodHandler from "../interfaces/server_method_handler";
+import deleteUser from "../usecases/delete_user";
 import { getUserUuidHeader } from "../utils/request_parser";
 import {
   sendNotFoundResponse,
@@ -11,9 +11,8 @@ import {
   sendServerErrorResponse,
   sendSuccessResponse,
 } from "../utils/send_response_helper";
-import { getUserWithOutUuid } from "../utils/response_parser";
 
-const getUserHandler: ServerMethodHandler = (request, response) => {
+const deleteUserHandler: ServerMethodHandler = (request, response) => {
   const userUuid = getUserUuidHeader(request.headers);
 
   if (userUuid === null) {
@@ -21,9 +20,9 @@ const getUserHandler: ServerMethodHandler = (request, response) => {
     return;
   }
 
-  getUser(userUuid)
-    .then((user) => {
-      sendSuccessResponse(response, { user: getUserWithOutUuid(user) });
+  deleteUser(userUuid)
+    .then(() => {
+      sendSuccessResponse(response, {});
     })
     .catch((error: Error) => {
       if (error.message === USER_NOT_FOUND) {
@@ -34,4 +33,4 @@ const getUserHandler: ServerMethodHandler = (request, response) => {
     });
 };
 
-export default getUserHandler;
+export default deleteUserHandler;
