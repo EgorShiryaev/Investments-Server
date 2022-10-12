@@ -1,104 +1,65 @@
-import { RunResult } from "sqlite3";
 import DATABASE from "../database";
-import { DatabaseResponse } from "../models";
+import DatabaseResponse from "../models/database_response";
 
-const createTableIfNotExists = (tableTitle: string, columns: string) => {
-  const sqlScript = `CREATE TABLE IF NOT EXISTS ${tableTitle} (id INTEGER NOT NULL, ${columns}, PRIMARY KEY (id))`;
-  console.log(sqlScript);
-
-  DATABASE.serialize(() => {
-    DATABASE.run(sqlScript, () => {
-      console.log(`Success create table ${tableTitle}`);
-    });
-  });
-};
-
-const getAll = <T>(tableTitle: string, where: string): Promise<T[]> => {
-  const sqlScript = `SELECT * FROM ${tableTitle} WHERE ${where}`;
-  console.log(sqlScript);
-
-  return new Promise((resolve, reject) => {
-    DATABASE.serialize(() => {
-      DATABASE.all(sqlScript, [], (error, rows) => {
-        if (error) {
-          console.log("Select error", error);
-          reject(error);
-        }
-        resolve(rows as T[]);
-      });
-    });
-  });
-};
-
-const insert = (
-  tableTitle: string,
-  columns: string,
-  values: string
+const runScript = (
+  sqlScript: string,
+  params?: object
 ): Promise<DatabaseResponse> => {
-  const sqlScript = `INSERT INTO ${tableTitle} (${columns}) VALUES (${values})`;
-  console.log(sqlScript);
+  console.log(sqlScript, params);
 
   return new Promise((resolve, reject) => {
     DATABASE.serialize(() => {
-      DATABASE.run(sqlScript, (_: RunResult, error: Error | null) => {
-        if (error) {
-          console.log("Insert error: " + error);
-          reject({ success: false, message: error });
-        } else {
-          resolve({ success: true });
+      DATABASE.run(sqlScript, params, (error) => {
+        if (error !== null) {
+          reject({ success: false, message: error.message });
+          return;
         }
+
+        resolve({ success: true });
       });
     });
   });
 };
 
-const update = (
-  tableTitle: string,
-  set: string,
-  where: string
-): Promise<DatabaseResponse> => {
-  const sqlScript = `UPDATE ${tableTitle} SET ${set} WHERE ${where}`;
-  console.log(sqlScript);
+const readFirst = <T>(
+  sqlScript: string,
+  params?: object
+): Promise<T | undefined> => {
+  console.log(sqlScript, params);
 
   return new Promise((resolve, reject) => {
     DATABASE.serialize(() => {
-      DATABASE.run(sqlScript, (_: RunResult, error: Error | null) => {
-        if (error) {
-          console.log("Update error: " + error);
-          reject({ success: false, message: error });
-        } else {
-          resolve({ success: true });
+      DATABASE.get(sqlScript,params, (error, row) => {
+        if (error !== null) {
+          reject({ success: false, message: error.message });
+          return;
         }
+        return resolve(row);
       });
     });
   });
 };
 
-const remove = (
-  tableTitle: string,
-  where: string
-): Promise<DatabaseResponse> => {
-  const sqlScript = `DELETE ${tableTitle} WHERE ${where}`;
-  console.log(sqlScript);
+const readAll = <T>(sqlScript: string, params?: object): Promise<T[]> => {
+  console.log(sqlScript, params);
 
   return new Promise((resolve, reject) => {
     DATABASE.serialize(() => {
-      DATABASE.run(sqlScript, (error) => {
-        if (error) {
-          console.log("Delete error: " + error);
-          reject({ success: false, message: error });
-        } else {
-          resolve({ success: true });
+      DATABASE.all(sqlScript,params, (error, rows) => {
+        if (error !== null) {
+          reject({ success: false, message: error.message });
+          return;
         }
+        return resolve(rows);
       });
     });
   });
 };
 
-export default {
-  createTableIfNotExists,
-  getAll,
-  insert,
-  update,
-  remove,
+const databaseManager = {
+  runScript,
+  readFirst,
+  readAll,
 };
+
+export default databaseManager;

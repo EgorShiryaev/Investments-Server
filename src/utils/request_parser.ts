@@ -1,5 +1,6 @@
 import { IncomingHttpHeaders } from "http";
-import { USER_UUID_PARAMETER_KEY } from "../constants";
+
+const USER_UUID_PARAMETER_KEY = "user-uuid";
 
 export const getUserUuidHeader = (
   headers: IncomingHttpHeaders
@@ -30,3 +31,8 @@ export const getUserUuidGetParams = (url?: string): string | null => {
 
   return paramsMap.get(USER_UUID_PARAMETER_KEY) ?? null;
 };
+
+
+export const parseToJson = (obj:object) => {
+  return JSON.stringify(obj);
+}
