@@ -9,13 +9,16 @@ const runScript = (
 
   return new Promise((resolve, reject) => {
     DATABASE.serialize(() => {
-      DATABASE.run(sqlScript, params, (error) => {
+      DATABASE.run(sqlScript, params, function (error) {
         if (error !== null) {
           reject({ success: false, message: error.message });
           return;
         }
-
-        resolve({ success: true });
+        resolve({
+          success: true,
+          lastIndex: this.lastID,
+          rowsChanged: this.changes,
+        });
       });
     });
   });
