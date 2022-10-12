@@ -13,11 +13,13 @@ const createTableIfNotExists = () => {
   return databaseManager.runScript(script);
 };
 
-const add = (uuid: string, name?: string, surname?: string) => {
+const add = (user: User) => {
   const script = `INSERT INTO ${tableTitle} 
   (uuid, name, surname) 
   VALUES ($uuid, $name, $surname)`;
 
+  const { uuid, name, surname } = user;
+
   const params = {
     $uuid: uuid,
     $name: name ?? null,
@@ -27,11 +29,13 @@ const add = (uuid: string, name?: string, surname?: string) => {
   return databaseManager.runScript(script, params);
 };
 
-const edit = (uuid: string, name?: string, surname?: string) => {
+const edit = (user: User) => {
   const script = `UPDATE ${tableTitle} 
   SET name = $name, surname = $surname
   WHERE uuid = $uuid`;
 
+  const { uuid, name, surname } = user;
+
   const params = {
     $uuid: uuid,
     $name: name ?? null,
@@ -41,7 +45,7 @@ const edit = (uuid: string, name?: string, surname?: string) => {
   return databaseManager.runScript(script, params);
 };
 
-const get = (uuid: string) => {
+const get = (uuid: string): Promise<User | undefined> => {
   const script = `SELECT * FROM ${tableTitle} 
   WHERE uuid = $uuid`;
   const params = {

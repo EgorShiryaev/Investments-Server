@@ -29,7 +29,7 @@ const readFirst = <T>(
 
   return new Promise((resolve, reject) => {
     DATABASE.serialize(() => {
-      DATABASE.get(sqlScript,params, (error, row) => {
+      DATABASE.get(sqlScript, params, (error, row) => {
         if (error !== null) {
           reject({ success: false, message: error.message });
           return;
@@ -45,7 +45,7 @@ const readAll = <T>(sqlScript: string, params?: object): Promise<T[]> => {
 
   return new Promise((resolve, reject) => {
     DATABASE.serialize(() => {
-      DATABASE.all(sqlScript,params, (error, rows) => {
+      DATABASE.all(sqlScript, params, (error, rows) => {
         if (error !== null) {
           reject({ success: false, message: error.message });
           return;
