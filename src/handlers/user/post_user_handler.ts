@@ -2,11 +2,11 @@ import ServerMethodHandler from "../../interfaces/server_method_handler";
 import {
   getUserBodyParametersElseSendErrorResponse,
   getUserUuidElseSendErrorResponse,
+  sendErrorResponse,
   sendSuccessResponse,
 } from "../../utils/send_response_helper";
 import { getUserWithOutUuid } from "../../utils/response_parser";
 import createUser from "../../usecases/user/create_user";
-import { sendServerErrorResponse } from "../../../dist/src/utils/send_response_helper";
 
 const postUserHandler: ServerMethodHandler = (request, response) => {
   const userUuid = getUserUuidElseSendErrorResponse(request, response);
@@ -26,7 +26,7 @@ const postUserHandler: ServerMethodHandler = (request, response) => {
       sendSuccessResponse(response, getUserWithOutUuid(user));
     })
     .catch((error: Error) => {
-      sendServerErrorResponse(response, error.message);
+      sendErrorResponse(response, error);
     });
 };
 
