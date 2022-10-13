@@ -3,7 +3,6 @@ import {
   SubscriptionAction,
 } from "tinkoff-invest-api/cjs/generated/marketdata";
 import { investmentFigiPriceRepository } from "../repositories";
-
 import TINKOFF_INVEST_API from "../tinkoff_invest_api";
 import { getPrice } from "../utils/tinkoff_invest_api_utils";
 

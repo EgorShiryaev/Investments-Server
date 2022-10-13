@@ -16,7 +16,6 @@ const runScript = (
         }
         resolve({
           success: true,
-          lastIndex: this.lastID,
           rowsChanged: this.changes,
         });
       });
