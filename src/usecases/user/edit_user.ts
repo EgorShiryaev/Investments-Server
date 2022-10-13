@@ -1,6 +1,5 @@
-import User from "../entities/user";
-import usersTableManager from "../managers/users_table_manager";
-import { getUserRequestParametersError } from "../utils/check_request_parameters";
+import User from "../../entities/user";
+import usersTableManager from "../../managers/users_table_manager";
 import getUser from "./get_user";
 
 const editUser = async (user: User): Promise<User> => {

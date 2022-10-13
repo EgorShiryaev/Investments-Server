@@ -48,6 +48,7 @@ const edit = (user: User) => {
 const get = (uuid: string): Promise<User | undefined> => {
   const script = `SELECT * FROM ${tableTitle} 
   WHERE uuid = $uuid`;
+
   const params = {
     $uuid: uuid,
   };
@@ -58,6 +59,7 @@ const get = (uuid: string): Promise<User | undefined> => {
 const remove = (uuid: string) => {
   const script = `DELETE FROM ${tableTitle} 
   WHERE uuid = $uuid`;
+
   const params = {
     $uuid: uuid,
   };

@@ -1,6 +1,9 @@
 import { IncomingMessage } from "http";
 import WebSocket from "ws";
-import { getUserUuidGetParams, parseToJson } from "../utils/request_parser";
+import {
+  getUserUuidGetParams,
+  parseToJson,
+} from "../utils/request_parameter_parser";
 import {
   investmentFigiPriceRepository,
   userSubscribeInvestmentFigisRepository,
