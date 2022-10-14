@@ -4,3 +4,9 @@ export const checkUserRequestBodyParametersIsNotExist = (
 ) => {
   return name === undefined || surname === undefined;
 };
+
+export const checkSearchInvestmentQueryParametersIsNotExist = (
+  query: string | string[] | undefined
+) => {
+  return query === undefined || query === "";
+};

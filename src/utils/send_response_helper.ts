@@ -9,7 +9,10 @@ import {
   SERVER_ERROR_STATUS,
   SUCCESS_STATUS,
 } from "../constants/response_statuses";
-import { checkUserRequestBodyParametersIsNotExist } from "./check_body_parameters";
+import {
+  checkSearchInvestmentQueryParametersIsNotExist,
+  checkUserRequestBodyParametersIsNotExist,
+} from "./check_request_parameters";
 import { generateUserBodyParametersErrorMessage } from "./generate_error_message";
 import { getUserUuidHeader, parseToJson } from "./request_parameter_parser";
 
@@ -66,4 +69,24 @@ export const getUserBodyParametersElseSendErrorResponse = (
     return null;
   }
   return { name, surname };
+};
+
+export const getSearchInvestmentQueryParameters = (
+  request: Request,
+  response: Response
+): { query: string } | null => {
+  const { query } = request.query;
+
+  const isNotExists = checkSearchInvestmentQueryParametersIsNotExist(
+    query as string | undefined
+  );
+
+  if (isNotExists) {
+    sendErrorResponse(response, Error("Parameter 'query' not found"));
+    return null;
+  }
+
+  return {
+    query: (typeof query === "string" ? query : (query as string[])[0]).trim(),
+  };
 };
