@@ -87,9 +87,39 @@ const get = (figi: string): Promise<Instrument | undefined> => {
 };
 
 const getAll = (): Promise<Instrument[]> => {
-  const script = `SELECT * FROM ${tableTitle}`;
+  const script = `SELECT * FROM ${tableTitle}
+  ORDER BY 
+    title ASC
+  `;
 
   return databaseManager.readAll<Instrument>(script);
+};
+
+const getAllWhereQueryIsExists = (query: string) => {
+  const script = `SELECT * FROM ${tableTitle} 
+  WHERE 
+    ticker LIKE $query 
+    OR ticker LIKE $queryUppercase
+    OR ticker LIKE $queryLowercase
+    OR ticker LIKE $queryUpperFirst
+    OR title LIKE $query
+    OR title LIKE $queryUppercase
+    OR title LIKE $queryLowercase
+    OR title LIKE $queryUpperFirst
+  ORDER BY 
+    title ASC
+  `;
+
+  const params = {
+    $query: `%${query}%`,
+    $queryUppercase: `%${query.toUpperCase()}%`,
+    $queryLowercase: `%${query.toLowerCase()}%`,
+    $queryUpperFirst: `%${
+      query[0].toUpperCase() + query.substring(1).toLowerCase()
+    }%`,
+  };
+
+  return databaseManager.readAll<Instrument>(script, params);
 };
 
 const remove = (figi: string) => {
@@ -111,6 +141,7 @@ const instrumentsTableManager = {
   edit,
   get,
   getAll,
+  getAllWhereQueryIsExists,
   remove,
 };
 
