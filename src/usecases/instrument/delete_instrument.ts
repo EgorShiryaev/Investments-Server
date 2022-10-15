@@ -1,14 +1,15 @@
-import { INSTRUMENT_NOT_FOUND } from "../../constants/errors";
-import instrumentsTableManager from "../../managers/instruments_table_manager";
+import { INSTRUMENT_NOT_FOUND } from '../../constants/errors'
+import instrumentsTableManager from '../../managers/instruments_table_manager'
+import DatabaseResponse from '../../models/database_response'
 
-const deleteInstrument = async (figi: string) => {
-  const result = await instrumentsTableManager.remove(figi);
+const deleteInstrument = async (figi: string): Promise<DatabaseResponse> => {
+  const result = await instrumentsTableManager.remove(figi)
 
   if (result.rowsChanged === 0) {
-    throw Error(INSTRUMENT_NOT_FOUND);
+    throw Error(INSTRUMENT_NOT_FOUND)
   }
 
-  return result;
-};
+  return result
+}
 
-export default deleteInstrument;
+export default deleteInstrument

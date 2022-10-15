@@ -1,7 +1,7 @@
-import { Bond, Currency, Etf, Future, Share } from "tinkoff-invest-api/cjs/generated/instruments";
-import Instrument from "../entities/instrument";
+import { Bond, Currency, Etf, Future, Share } from 'tinkoff-invest-api/cjs/generated/instruments'
+import Instrument from '../entities/instrument'
 
-type Type = Share | Bond | Future | Etf | Currency;
+type Type = Share | Bond | Future | Etf | Currency
 
 export const convertItemToInstrument = (
   item: Type,
@@ -13,6 +13,6 @@ export const convertItemToInstrument = (
     title: item.name,
     lot: item.lot,
     currency: item.currency,
-    instrumentType: instrumentType,
-  };
-};
+    instrumentType
+  }
+}

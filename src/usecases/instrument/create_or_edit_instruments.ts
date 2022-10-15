@@ -1,41 +1,46 @@
-import Instrument from "../../entities/instrument";
-import instrumentsTableManager from "../../managers/instruments_table_manager";
-import editInstrument from "./edit_instrument";
-import getInstument from "./get_instrument";
+import Instrument from '../../entities/instrument'
+import instrumentsTableManager from '../../managers/instruments_table_manager'
+import CreateOrEditInstrumentsResult from '../../models/instrument_response_tinkoff_api'
+import editInstrument from './edit_instrument'
+import getInstument from './get_instrument'
 
-const createOrEditInstruments = async (instruments: Instrument[]) => {
-  const instrumentsNotExists: Instrument[] = [];
+const createOrEditInstruments = async (
+  instruments: Instrument[]
+): Promise<CreateOrEditInstrumentsResult> => {
+  const instrumentsNotExists: Instrument[] = []
 
-  let countUpdates = 0;
+  let countUpdates = 0
 
   await Promise.all(
-    instruments.map(async (value) =>
-      getInstument(value.figi)
-        .then(async (savedValue) => {
-          if (
-            value.figi !== savedValue.figi ||
-            value.currency !== savedValue.currency ||
-            value.instrumentType !== savedValue.instrumentType ||
-            value.lot !== savedValue.lot ||
-            value.ticker !== savedValue.ticker ||
-            value.title !== savedValue.title
-          ) {
-            countUpdates++;
-            return await editInstrument(value);
-          }
-        })
-        .catch(() => instrumentsNotExists.push(value))
+    instruments.map(
+      async (value) =>
+        await getInstument(value.figi)
+          .then(async (savedValue) => {
+            if (
+              value.figi !== savedValue.figi ||
+              value.currency !== savedValue.currency ||
+              value.instrumentType !== savedValue.instrumentType ||
+              value.lot !== savedValue.lot ||
+              value.ticker !== savedValue.ticker ||
+              value.title !== savedValue.title
+            ) {
+              countUpdates++
+              return await editInstrument(value)
+            }
+          })
+          .catch(() => instrumentsNotExists.push(value))
     )
-  );
+  )
 
   if (instrumentsNotExists.length > 0) {
-    await instrumentsTableManager.addSeveral(instrumentsNotExists);
+    await instrumentsTableManager.addSeveral(instrumentsNotExists)
   }
 
   return {
     created: instrumentsNotExists.length,
     updated: countUpdates,
-  };
-};
+    all: instruments.length
+  }
+}
 
-export default createOrEditInstruments;
+export default createOrEditInstruments

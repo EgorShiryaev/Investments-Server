@@ -1,9 +1,10 @@
-import Instrument from "../entities/instrument";
-import databaseManager from "./database_manager";
+import Instrument from '../entities/instrument'
+import DatabaseResponse from '../models/database_response'
+import databaseManager from './database_manager'
 
-const tableTitle = "Instruments";
+const tableTitle = 'Instruments'
 
-const createTableIfNotExists = () => {
+const createTableIfNotExists = async (): Promise<DatabaseResponse> => {
   const script = `CREATE TABLE IF NOT EXISTS ${tableTitle} (
     figi TEXT PRIMARY KEY, 
     ticker TEXT NOT NULL, 
@@ -11,17 +12,17 @@ const createTableIfNotExists = () => {
     lot INT NOT NULL,
     currency TEXT NOT NULL,
     instrumentType TEXT NOT NULL
-  )`;
+  )`
 
-  return databaseManager.runScript(script);
-};
+  return await databaseManager.runScript(script)
+}
 
-const add = (instrument: Instrument) => {
+const add = async (instrument: Instrument): Promise<DatabaseResponse> => {
   const script = `INSERT INTO ${tableTitle} 
   (figi, ticker, title, lot, currency, instrumentType) 
-  VALUES ($figi, $ticker, $title, $lot, $currency, $instrumentType)`;
+  VALUES ($figi, $ticker, $title, $lot, $currency, $instrumentType)`
 
-  const { figi, ticker, title, lot, currency, instrumentType } = instrument;
+  const { figi, ticker, title, lot, currency, instrumentType } = instrument
 
   const params = {
     $figi: figi,
@@ -29,14 +30,16 @@ const add = (instrument: Instrument) => {
     $title: title,
     $lot: lot,
     $currency: currency,
-    $instrumentType: instrumentType,
-  };
+    $instrumentType: instrumentType
+  }
 
-  return databaseManager.runScript(script, params);
-};
+  return await databaseManager.runScript(script, params)
+}
 
-const addSeveral = (instruments: Instrument[]) => {
-  const placeholders = instruments.map(() => "(?, ?, ?, ?, ?, ?)").join(", ");
+const addSeveral = async (
+  instruments: Instrument[]
+): Promise<DatabaseResponse> => {
+  const placeholders = instruments.map(() => '(?, ?, ?, ?, ?, ?)').join(', ')
 
   const values = instruments
     .map((v) => [
@@ -45,23 +48,23 @@ const addSeveral = (instruments: Instrument[]) => {
       v.title,
       v.lot,
       v.currency,
-      v.instrumentType,
+      v.instrumentType
     ])
-    .flat();
+    .flat()
 
   const script = `INSERT INTO ${tableTitle} 
   (figi, ticker, title, lot, currency, instrumentType) 
-  VALUES ${placeholders}`;
+  VALUES ${placeholders}`
 
-  return databaseManager.runScript(script, values);
-};
+  return await databaseManager.runScript(script, values)
+}
 
-const edit = (instrument: Instrument) => {
+const edit = async (instrument: Instrument): Promise<DatabaseResponse> => {
   const script = `UPDATE ${tableTitle} 
   SET ticker = $ticker, title = $title, lot = $lot, currency = $currency, instrumentType = $instrumentType
-  WHERE figi = $figi`;
+  WHERE figi = $figi`
 
-  const { figi, ticker, title, lot, currency, instrumentType } = instrument;
+  const { figi, ticker, title, lot, currency, instrumentType } = instrument
 
   const params = {
     $figi: figi,
@@ -69,33 +72,35 @@ const edit = (instrument: Instrument) => {
     $title: title,
     $lot: lot,
     $currency: currency,
-    $instrumentType: instrumentType,
-  };
+    $instrumentType: instrumentType
+  }
 
-  return databaseManager.runScript(script, params);
-};
+  return await databaseManager.runScript(script, params)
+}
 
-const get = (figi: string): Promise<Instrument | undefined> => {
+const get = async (figi: string): Promise<Instrument | undefined> => {
   const script = `SELECT * FROM ${tableTitle} 
-  WHERE figi = $figi`;
+  WHERE figi = $figi`
 
   const params = {
-    $figi: figi,
-  };
+    $figi: figi
+  }
 
-  return databaseManager.readFirst<Instrument>(script, params);
-};
+  return await databaseManager.readFirst<Instrument>(script, params)
+}
 
-const getAll = (): Promise<Instrument[]> => {
+const getAll = async (): Promise<Instrument[]> => {
   const script = `SELECT * FROM ${tableTitle}
   ORDER BY 
     title ASC
-  `;
+  `
 
-  return databaseManager.readAll<Instrument>(script);
-};
+  return await databaseManager.readAll<Instrument>(script)
+}
 
-const getAllWhereQueryIsExists = (query: string) => {
+const getAllWhereQueryIsExists = async (
+  query: string
+): Promise<Instrument[]> => {
   const script = `SELECT * FROM ${tableTitle} 
   WHERE 
     ticker LIKE $query 
@@ -108,7 +113,7 @@ const getAllWhereQueryIsExists = (query: string) => {
     OR title LIKE $queryUpperFirst
   ORDER BY 
     title ASC
-  `;
+  `
 
   const params = {
     $query: `%${query}%`,
@@ -116,33 +121,32 @@ const getAllWhereQueryIsExists = (query: string) => {
     $queryLowercase: `%${query.toLowerCase()}%`,
     $queryUpperFirst: `%${
       query[0].toUpperCase() + query.substring(1).toLowerCase()
-    }%`,
-  };
+    }%`
+  }
 
-  return databaseManager.readAll<Instrument>(script, params);
-};
+  return await databaseManager.readAll<Instrument>(script, params)
+}
 
-const remove = (figi: string) => {
+const remove = async (figi: string): Promise<DatabaseResponse> => {
   const script = `DELETE FROM ${tableTitle} 
-   WHERE figi = $figi`;
+   WHERE figi = $figi`
 
   const params = {
-    $figi: figi,
-  };
+    $figi: figi
+  }
 
-  return databaseManager.runScript(script, params);
-};
-
-createTableIfNotExists();
+  return await databaseManager.runScript(script, params)
+}
 
 const instrumentsTableManager = {
+  createTableIfNotExists,
   add,
   addSeveral,
   edit,
   get,
   getAll,
   getAllWhereQueryIsExists,
-  remove,
-};
+  remove
+}
 
-export default instrumentsTableManager;
+export default instrumentsTableManager

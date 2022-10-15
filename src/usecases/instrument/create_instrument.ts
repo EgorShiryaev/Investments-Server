@@ -1,11 +1,13 @@
-import Instrument from "../../entities/instrument";
-import instrumentsTableManager from "../../managers/instruments_table_manager";
-import getInstument from "./get_instrument";
+import Instrument from '../../entities/instrument'
+import instrumentsTableManager from '../../managers/instruments_table_manager'
+import getInstument from './get_instrument'
 
-const createInstrument = async (instrument: Instrument) => {
-  await instrumentsTableManager.add(instrument);
+const createInstrument = async (
+  instrument: Instrument
+): Promise<Instrument> => {
+  await instrumentsTableManager.add(instrument)
 
-  return getInstument(instrument.figi);
-};
+  return await getInstument(instrument.figi)
+}
 
-export default createInstrument;
+export default createInstrument

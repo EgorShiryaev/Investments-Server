@@ -9,7 +9,8 @@
     "strict": true,
     "moduleResolution": "node",
     "lib": ["ESNext"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
   },
   "exclude": [
     "node_modules",
