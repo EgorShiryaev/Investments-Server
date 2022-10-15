@@ -1,11 +1,9 @@
-import Instrument from './instrument'
-
-interface InstrumentList {
-  shares: Instrument[]
-  bonds: Instrument[]
-  etfs: Instrument[]
-  futures: Instrument[]
-  currencies: Instrument[]
+interface InstrumentList<T> {
+  shares: T[]
+  bonds: T[]
+  etfs: T[]
+  futures: T[]
+  currencies: T[]
 }
 
 export default InstrumentList

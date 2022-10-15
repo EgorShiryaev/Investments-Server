@@ -1,11 +1,18 @@
-import { Bond, Currency, Etf, Future, Share } from 'tinkoff-invest-api/cjs/generated/instruments'
+import {
+  Bond,
+  Currency,
+  Etf,
+  Future,
+  Share
+} from 'tinkoff-invest-api/cjs/generated/instruments'
 import Instrument from '../entities/instrument'
+import InstrumentType from '../models/instrument_type'
 
 type Type = Share | Bond | Future | Etf | Currency
 
 export const convertItemToInstrument = (
   item: Type,
-  instrumentType: string
+  instrumentType: InstrumentType
 ): Instrument => {
   return {
     figi: item.figi,
