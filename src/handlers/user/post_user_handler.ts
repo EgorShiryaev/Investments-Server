@@ -1,33 +1,33 @@
-import ServerMethodHandler from "../../interfaces/server_method_handler";
+import ServerMethodHandler from '../../interfaces/server_method_handler'
 import {
   getUserBodyParametersElseSendErrorResponse,
   getUserUuidElseSendErrorResponse,
   sendErrorResponse,
-  sendSuccessResponse,
-} from "../../utils/send_response_helper";
-import { getUserWithOutUuid } from "../../utils/response_parser";
-import createUser from "../../usecases/user/create_user";
+  sendSuccessResponse
+} from '../../utils/send_response_helper'
+import { getUserWithOutUuid } from '../../utils/response_parser'
+import createUser from '../../usecases/user/create_user'
 
 const postUserHandler: ServerMethodHandler = (request, response) => {
-  const userUuid = getUserUuidElseSendErrorResponse(request, response);
+  const userUuid = getUserUuidElseSendErrorResponse(request, response)
   if (userUuid === null) {
-    return;
+    return
   }
 
-  const body = getUserBodyParametersElseSendErrorResponse(request, response);
+  const body = getUserBodyParametersElseSendErrorResponse(request, response)
   if (body === null) {
-    return;
+    return
   }
 
-  const { name, surname } = body;
+  const { name, surname } = body
 
-  createUser({ uuid: userUuid, name: name, surname: surname })
+  createUser({ uuid: userUuid, name, surname })
     .then((user) => {
-      sendSuccessResponse(response, getUserWithOutUuid(user));
+      sendSuccessResponse(response, getUserWithOutUuid(user))
     })
     .catch((error: Error) => {
-      sendErrorResponse(response, error);
-    });
-};
+      sendErrorResponse(response, error)
+    })
+}
 
-export default postUserHandler;
+export default postUserHandler

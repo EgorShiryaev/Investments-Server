@@ -1,6 +1,6 @@
 interface Quotation {
-  figi: string;
-  price: number;
+  figi: string
+  price: number
 }
 
-export default Quotation;
+export default Quotation

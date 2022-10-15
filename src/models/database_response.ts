@@ -1,8 +1,8 @@
 interface DatabaseResponse {
-  success: boolean;
-  message?: Error;
-  lastIndex?: number;
-  rowsChanged?: number;
+  success: boolean
+  message?: Error
+  lastIndex?: number
+  rowsChanged?: number
 }
 
-export default DatabaseResponse;
+export default DatabaseResponse

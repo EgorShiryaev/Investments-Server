@@ -1,6 +1,6 @@
 enum WebSocketOperation {
-  subscribe = "subscribe",
-  unsubscribe = "unsubscribe",
+  subscribe = 'subscribe',
+  unsubscribe = 'unsubscribe',
 }
 
-export default WebSocketOperation;
+export default WebSocketOperation

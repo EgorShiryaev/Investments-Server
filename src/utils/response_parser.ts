@@ -1,6 +1,7 @@
-import User from "../entities/user";
+import User from '../entities/user'
 
-export const getUserWithOutUuid = (user: User) => ({
+export const getUserWithOutUuid = (user: User): User & { uuid: undefined } => ({
   ...user,
-  uuid: undefined,
-});
+  // @ts-expect-error
+  uuid: undefined
+})

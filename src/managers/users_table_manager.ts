@@ -1,79 +1,73 @@
-import User from "../entities/user";
-import databaseManager from "./database_manager";
+import User from '../entities/user'
+import DatabaseResponse from '../models/database_response'
+import databaseManager from './database_manager'
 
-const tableTitle = "Users";
+const tableTitle = 'Users'
 
-const createTableIfNotExists = () => {
+const createTableIfNotExists = async (): Promise<DatabaseResponse> => {
   const script = `CREATE TABLE IF NOT EXISTS ${tableTitle} (
     uuid TEXT PRIMARY KEY, 
     name TEXT, 
     surname TEXT
-  )`;
+  )`
 
-  return databaseManager.runScript(script);
-};
+  return await databaseManager.runScript(script)
+}
 
-const add = (user: User) => {
+const add = async (user: User): Promise<DatabaseResponse> => {
   const script = `INSERT INTO ${tableTitle} 
   (uuid, name, surname) 
-  VALUES ($uuid, $name, $surname)`;
+  VALUES ($uuid, $name, $surname)`
 
-  const { uuid, name, surname } = user;
+  const { uuid, name, surname } = user
 
   const params = {
     $uuid: uuid,
     $name: name ?? null,
-    $surname: surname ?? null,
-  };
+    $surname: surname ?? null
+  }
 
-  return databaseManager.runScript(script, params);
-};
+  return await databaseManager.runScript(script, params)
+}
 
-const edit = (user: User) => {
+const edit = async (user: User): Promise<DatabaseResponse> => {
   const script = `UPDATE ${tableTitle} 
   SET name = $name, surname = $surname
-  WHERE uuid = $uuid`;
+  WHERE uuid = $uuid`
 
-  const { uuid, name, surname } = user;
+  const { uuid, name, surname } = user
 
   const params = {
     $uuid: uuid,
     $name: name ?? null,
-    $surname: surname ?? null,
-  };
+    $surname: surname ?? null
+  }
 
-  return databaseManager.runScript(script, params);
-};
+  return await databaseManager.runScript(script, params)
+}
 
-const get = (uuid: string): Promise<User | undefined> => {
+const get = async (uuid: string): Promise<User | undefined> => {
   const script = `SELECT * FROM ${tableTitle} 
-  WHERE uuid = $uuid`;
+  WHERE uuid = $uuid`
 
   const params = {
-    $uuid: uuid,
-  };
+    $uuid: uuid
+  }
 
-  return databaseManager.readFirst<User>(script, params);
-};
+  return await databaseManager.readFirst<User>(script, params)
+}
 
-const remove = (uuid: string) => {
+const remove = async (uuid: string): Promise<DatabaseResponse> => {
   const script = `DELETE FROM ${tableTitle} 
-  WHERE uuid = $uuid`;
+  WHERE uuid = $uuid`
 
   const params = {
-    $uuid: uuid,
-  };
+    $uuid: uuid
+  }
 
-  return databaseManager.runScript(script, params);
-};
+  return await databaseManager.runScript(script, params)
+}
 
-createTableIfNotExists();
+const usersTableManager = { createTableIfNotExists, add, edit, get, remove }
 
-const usersTableManager = {
-  add,
-  edit,
-  get,
-  remove,
-};
-
-export default usersTableManager;
+export default usersTableManager
