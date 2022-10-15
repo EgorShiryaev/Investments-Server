@@ -129,7 +129,7 @@ const getAllWhereQueryIsExists = async (
 
 const remove = async (figi: string): Promise<DatabaseResponse> => {
   const script = `DELETE FROM ${tableTitle} 
-   WHERE figi = $figi`
+    WHERE figi = $figi`
 
   const params = {
     $figi: figi
