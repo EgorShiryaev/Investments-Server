@@ -3,4 +3,4 @@ enum WebSocketOperation {
   unsubscribe = 'unsubscribe',
 }
 
-export default WebSocketOperation
+export default WebSocketOperation;

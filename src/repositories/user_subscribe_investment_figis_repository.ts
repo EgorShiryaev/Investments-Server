@@ -1,47 +1,47 @@
-import investmentFigiNumberOfSubscriptionsRepository from './investment_figi_number_of_subscriptions_repository'
+import investmentFigiNumberOfSubscriptionsRepository from './investment_figi_number_of_subscriptions_repository';
 
-const userSubscribeInvestmentFigisRepository = new Map<string, string[]>()
+const userSubscribeInvestmentFigisRepository = new Map<string, string[]>();
 
-const getUserInvestmentFigis = (userUuid: string): string[] => {
-  const userInvestmentFigis =
-    userSubscribeInvestmentFigisRepository.get(userUuid)
+const getUserInvestmentFigis = (userUuid: string) => {
+	const userInvestmentFigis =
+    userSubscribeInvestmentFigisRepository.get(userUuid);
 
-  return userInvestmentFigis ?? []
-}
+	return userInvestmentFigis ?? [];
+};
 
-const addUserInvestmentFigi = (userUuid: string, figi: string): void => {
-  investmentFigiNumberOfSubscriptionsRepository.incrementSubscribtion(figi)
+const addUserInvestmentFigi = (userUuid: string, figi: string) => {
+	investmentFigiNumberOfSubscriptionsRepository.incrementSubscribtion(figi);
 
-  const currentUserFigis = userSubscribeInvestmentFigisRepository.get(userUuid)
+	const currentUserFigis = userSubscribeInvestmentFigisRepository.get(userUuid);
 
-  if (currentUserFigis == null) {
-    userSubscribeInvestmentFigisRepository.set(userUuid, [figi])
-    return
-  } else if (currentUserFigis.includes(figi)) {
-    return
-  }
-  const newUserFigis = [...currentUserFigis, figi]
-  userSubscribeInvestmentFigisRepository.set(userUuid, newUserFigis)
-}
+	if (currentUserFigis == null) {
+		userSubscribeInvestmentFigisRepository.set(userUuid, [figi]);
+		return;
+	} else if (currentUserFigis.includes(figi)) {
+		return;
+	}
+	const newUserFigis = [...currentUserFigis, figi];
+	userSubscribeInvestmentFigisRepository.set(userUuid, newUserFigis);
+};
 
-const deleteUserInvestmentFigi = (userUuid: string, figi: string): void => {
-  investmentFigiNumberOfSubscriptionsRepository.decrementSubscribtion(figi)
-  const currentUserFigis = userSubscribeInvestmentFigisRepository.get(userUuid)
+const deleteUserInvestmentFigi = (userUuid: string, figi: string) => {
+	investmentFigiNumberOfSubscriptionsRepository.decrementSubscribtion(figi);
+	const currentUserFigis = userSubscribeInvestmentFigisRepository.get(userUuid);
 
-  if (currentUserFigis != null) {
-    const newUserFigis = [...currentUserFigis].filter((v) => v !== figi)
+	if (currentUserFigis != null) {
+		const newUserFigis = [...currentUserFigis].filter((v) => v !== figi);
 
-    userSubscribeInvestmentFigisRepository.set(userUuid, newUserFigis)
-  }
-}
+		userSubscribeInvestmentFigisRepository.set(userUuid, newUserFigis);
+	}
+};
 
-const deleteAllUserInvestmentFigis = (userUuid: string): void => {
-  userSubscribeInvestmentFigisRepository.delete(userUuid)
-}
+const deleteAllUserInvestmentFigis = (userUuid: string) => {
+	userSubscribeInvestmentFigisRepository.delete(userUuid);
+};
 
 export default {
-  getUserInvestmentFigis,
-  addUserInvestmentFigi,
-  deleteUserInvestmentFigi,
-  deleteAllUserInvestmentFigis
-}
+	getUserInvestmentFigis,
+	addUserInvestmentFigi,
+	deleteUserInvestmentFigi,
+	deleteAllUserInvestmentFigis
+};

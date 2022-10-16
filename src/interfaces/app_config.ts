@@ -5,4 +5,4 @@ interface AppSettings {
   tinkoffInvestApiToken: string
 }
 
-export default AppSettings
+export default AppSettings;

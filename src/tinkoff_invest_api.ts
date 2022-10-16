@@ -1,8 +1,8 @@
-import { TinkoffInvestApi } from 'tinkoff-invest-api'
-import Settings from '../settings'
+import { TinkoffInvestApi } from 'tinkoff-invest-api';
+import Settings from '../settings';
 
 const TINKOFF_INVEST_API = new TinkoffInvestApi({
-  token: Settings.tinkoffInvestApiToken
-})
+	token: Settings.tinkoffInvestApiToken
+});
 
-export default TINKOFF_INVEST_API
+export default TINKOFF_INVEST_API;

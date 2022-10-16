@@ -1,16 +1,14 @@
-import instrumentsTableManager from './managers/instruments_table_manager'
-import usersTableManager from './managers/users_table_manager'
-import portfoliosTableManager from './managers/portfolios_table_manager'
-// import loadInstruments from './usecases/load_instruments/load_instruments'
+import instrumentsTableManager from './managers/instruments_table_manager';
+import UserTableManager from './managers/user_table_manager';
+import loadInstruments from './usecases/load_instruments/load_instruments';
 
-const beforeStartServer = async (): Promise<void> => {
-  await Promise.all([
-    usersTableManager.createTableIfNotExists(),
-    instrumentsTableManager.createTableIfNotExists(),
-    portfoliosTableManager.createTableIfNotExists()
-  ])
+const beforeStartServer = async ()=> {
+	await Promise.all([
+		UserTableManager.createTableIfNotExists(),
+		instrumentsTableManager.createTableIfNotExists(),
+	]);
 
-  // await loadInstruments()
-}
+	// await loadInstruments();
+};
 
-export default beforeStartServer
+export default beforeStartServer;
