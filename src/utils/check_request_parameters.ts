@@ -10,3 +10,9 @@ export const checkSearchInvestmentQueryParametersIsNotExist = (
 ): boolean => {
   return query === undefined || query === ''
 }
+
+export const checkPortfolioRequestBodyParametersIsNotExists = (
+  investmentFigi: string | undefined
+): boolean => {
+  return investmentFigi === undefined
+}
