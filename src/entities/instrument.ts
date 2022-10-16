@@ -7,4 +7,4 @@ interface Instrument {
   instrumentType: string
 }
 
-export default Instrument
+export default Instrument;

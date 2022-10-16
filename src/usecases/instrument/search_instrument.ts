@@ -1,16 +1,16 @@
-import Instrument from '../../entities/instrument'
-import InstrumentList from '../../entities/instrument_list'
-import instrumentsTableManager from '../../managers/instruments_table_manager'
-import { convertToInvestmentList } from '../../utils/convector'
+import Instrument from '../../entities/instrument';
+import InvestmentList from '../../entities/investment_list';
+import instrumentsTableManager from '../../managers/instruments_table_manager';
+import { convertToInvestmentList } from '../../utils/convector';
 
 const searchInstrument = async (
-  query: string
-): Promise<InstrumentList<Instrument>> => {
-  const instruments = await instrumentsTableManager.getAllWhereQueryIsExists(query)
+	query: string
+): Promise<InvestmentList<Instrument>> => {
+	const instruments = await instrumentsTableManager.getAllWhereQueryIsExists(
+		query
+	);
 
-  const list = convertToInvestmentList(instruments)
+	return convertToInvestmentList(instruments);
+};
 
-  return list
-}
-
-export default searchInstrument
+export default searchInstrument;

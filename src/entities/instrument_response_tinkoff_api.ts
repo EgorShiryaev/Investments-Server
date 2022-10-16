@@ -4,4 +4,4 @@ interface CreateOrEditInstrumentsResult {
   all: number
 }
 
-export default CreateOrEditInstrumentsResult
+export default CreateOrEditInstrumentsResult;

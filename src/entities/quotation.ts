@@ -3,4 +3,4 @@ interface Quotation {
   price: number
 }
 
-export default Quotation
+export default Quotation;

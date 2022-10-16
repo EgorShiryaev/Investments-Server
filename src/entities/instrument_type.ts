@@ -6,4 +6,4 @@ enum InstrumentType {
   currency = 'currency',
 }
 
-export default InstrumentType
+export default InstrumentType;
