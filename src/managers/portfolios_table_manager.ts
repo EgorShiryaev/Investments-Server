@@ -2,6 +2,11 @@ import PortfolioItem from '../entities/portfolio_item'
 import DatabaseResponse from '../models/database_response'
 import databaseManager from './database_manager'
 
+interface Record {
+  userUuid: string
+  instrumentFigi: string
+}
+
 const tableTitle = 'Portfolios'
 
 const createTableIfNotExists = async (): Promise<DatabaseResponse> => {
@@ -38,7 +43,7 @@ const add = async (
   return await databaseManager.runScript(script, params)
 }
 
-const get = async (userUuid: string): Promise<PortfolioItem[]> => {
+const getAll = async (userUuid: string): Promise<Record[]> => {
   const script = `SELECT * FROM ${tableTitle}
     WHERE userUuid = $userUuid`
 
@@ -46,7 +51,22 @@ const get = async (userUuid: string): Promise<PortfolioItem[]> => {
     $userUuid: userUuid
   }
 
-  return await databaseManager.readAll<PortfolioItem>(script, params)
+  return await databaseManager.readAll<Record>(script, params)
+}
+
+const get = async (
+  userUuid: string,
+  instrumentFigi: string
+): Promise<PortfolioItem | undefined> => {
+  const script = `SELECT * FROM ${tableTitle}
+  WHERE userUuid = $userUuid AND instrumentFigi = $instrumentFigi`
+
+  const params = {
+    $userUuid: userUuid,
+    $instrumentFigi: instrumentFigi
+  }
+
+  return await databaseManager.readFirst<PortfolioItem>(script, params)
 }
 
 const remove = async (
@@ -64,6 +84,12 @@ const remove = async (
   return await databaseManager.runScript(script, params)
 }
 
-const portfoliosTableManager = { createTableIfNotExists, add, get, remove }
+const portfoliosTableManager = {
+  createTableIfNotExists,
+  add,
+  get,
+  getAll,
+  remove
+}
 
 export default portfoliosTableManager

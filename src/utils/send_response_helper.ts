@@ -1,15 +1,18 @@
 import { Request, Response } from 'express'
 import {
+  ITEM_IS_EXISTS_ERRORS,
   ITEM_NOT_FOUND_ERRORS,
   USER_UUID_HEADER_NOT_FOUND
 } from '../constants/errors'
 import {
+  ITEM_IS_EXISTS_STATUS,
   ITEM_NOT_FOUND_STATUS,
   PARAMETER_NOT_FOUND_STATUS,
   SERVER_ERROR_STATUS,
   SUCCESS_STATUS
 } from '../constants/response_statuses'
 import {
+  checkPortfolioRequestBodyParametersIsNotExists,
   checkSearchInvestmentQueryParametersIsNotExist,
   checkUserRequestBodyParametersIsNotExist
 } from './check_request_parameters'
@@ -26,14 +29,19 @@ const sendResponse = (
 }
 
 export const sendErrorResponse = (response: Response, error: Error): void => {
-  const { message } = error
+  const send = (statusCode: number): void => {
+    sendResponse(response, statusCode, { message: error.message })
+  }
 
+  const { message } = error
   if (ITEM_NOT_FOUND_ERRORS.includes(message)) {
-    sendResponse(response, ITEM_NOT_FOUND_STATUS, { message })
+    send(ITEM_NOT_FOUND_STATUS)
+  } else if (ITEM_IS_EXISTS_ERRORS.includes(message)) {
+    send(ITEM_IS_EXISTS_STATUS)
   } else if (message.includes('not found')) {
-    sendResponse(response, PARAMETER_NOT_FOUND_STATUS, { message })
+    send(PARAMETER_NOT_FOUND_STATUS)
   } else {
-    sendResponse(response, SERVER_ERROR_STATUS, { message })
+    send(SERVER_ERROR_STATUS)
   }
 }
 
@@ -75,7 +83,7 @@ export const getUserBodyParametersElseSendErrorResponse = (
   return { name, surname }
 }
 
-export const getSearchInvestmentQueryParameters = (
+export const getSearchInvestmentQueryParametersElseSendErrorResponse = (
   request: Request,
   response: Response
 ): { query: string } | null => {
@@ -92,5 +100,24 @@ export const getSearchInvestmentQueryParameters = (
 
   return {
     query: (typeof query === 'string' ? query : (query as string[])[0]).trim()
+  }
+}
+
+export const getPortfolioParametersElseSendErrorRequest = (
+  request: Request,
+  response: Response
+): { investmentFigi: string } | null => {
+  const { investmentFigi } = request.body
+
+  const isNotExists =
+    checkPortfolioRequestBodyParametersIsNotExists(investmentFigi)
+
+  if (isNotExists) {
+    sendErrorResponse(response, Error("Parameter 'investmentFigi' not found"))
+    return null
+  }
+
+  return {
+    investmentFigi
   }
 }

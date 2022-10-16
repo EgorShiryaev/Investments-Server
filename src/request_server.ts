@@ -1,5 +1,4 @@
 import express from 'express'
-import { WebSocketServer } from 'ws'
 import Settings from '../settings'
 import beforeStartServer from './before_start_server'
 import {
@@ -10,12 +9,13 @@ import {
 } from './constants/method_paths'
 import getInstrumentsHandler from './handlers/instrument/get_instruments_handler'
 import getSearchInstrumentHandler from './handlers/instrument/get_search_instrument_handler'
+import deletePortfolioHandler from './handlers/portfolio/delete_portfolio_handler'
 import getPortfolioHandler from './handlers/portfolio/get_portfolio_handler'
+import postPortfolioHandler from './handlers/portfolio/post_portfolio_handler'
 import deleteUserHandler from './handlers/user/delete_user_handler'
 import getUserHandler from './handlers/user/get_user_handler'
 import postUserHandler from './handlers/user/post_user_handler'
 import putUserHandler from './handlers/user/put_user_handler'
-import webSocketQuantitionsHandler from './handlers/web_socket_quotations_handler'
 
 const app = express()
 const jsonParser = express.json()
@@ -26,7 +26,9 @@ beforeStartServer()
       console.log('Success start server')
     })
   })
-  .catch(() => {})
+  .catch((error) => {
+    console.log('Fail start server', error)
+  })
 
 app.get(USER_PATH, getUserHandler)
 app.post(USER_PATH, jsonParser, postUserHandler)
@@ -38,11 +40,5 @@ app.get(INSTRUMENTS_PATH, getInstrumentsHandler)
 app.get(SEARCH_INSTRUMENT_PATH, getSearchInstrumentHandler)
 
 app.get(PORTFOLIO_PATH, getPortfolioHandler)
-
-const WebSocketServerInstance = new WebSocketServer({
-  port: 8000,
-  host: `${Settings.serverUrl}`,
-  path: '/quotations'
-})
-
-WebSocketServerInstance.on('connection', webSocketQuantitionsHandler)
+app.post(PORTFOLIO_PATH, jsonParser, postPortfolioHandler)
+app.delete(PORTFOLIO_PATH, jsonParser, deletePortfolioHandler)

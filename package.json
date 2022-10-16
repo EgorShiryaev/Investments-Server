@@ -2,12 +2,12 @@
   "name": "investment_portfolio_server",
   "version": "1.0.0",
   "description": "Server for mobile app \"Investment Portfolio\"",
-  "main": "dist/src/app.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "lintfix": "eslint --fix . --ext .js,.ts",
     "build": "npm run lintfix && rm -rf dist && tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "startServer": "node dist/src/app.js",
+    "startServer": "node dist/src/index.js",
     "buildAndStartServer": "npm run build && npm run startServer"
   },
   "author": "Egor Shiryaev",
