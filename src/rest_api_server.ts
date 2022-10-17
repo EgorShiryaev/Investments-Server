@@ -1,6 +1,7 @@
 import express from 'express';
 import Settings from '../settings';
 import beforeStartServer from './before_start_server';
+import authHandler from './server_method_handlers/auth_handler';
 import registrationHandler from './server_method_handlers/registration_handler';
 
 const app = express();
@@ -17,4 +18,4 @@ beforeStartServer()
 	});
 
 app.post('/registration', jsonParser, registrationHandler);
-
+app.post('/auth', jsonParser, authHandler);
