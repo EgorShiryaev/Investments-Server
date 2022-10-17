@@ -2,6 +2,8 @@ import AuthParameters from '../interfaces/methods_parameters/auth_parameters';
 import RegistrationParameters from '../interfaces/methods_parameters/registration_parameters';
 import SearchParameters from '../interfaces/methods_parameters/search_parameters';
 import FavoriteInstrumentsParameters from '../interfaces/methods_parameters/favorite_intruments_parameters';
+import AddFavoriteInstrumentsParameters from '../interfaces/methods_parameters/add_favorite_instruments_parameters';
+import DeleteFavoriteInstrumentsParameters from '../interfaces/methods_parameters/delete_favorite_instruments_parameters';
 
 const generateNotFoundParametersDescription = (array: (string | false)[]) => {
 	return array
@@ -9,28 +11,49 @@ const generateNotFoundParametersDescription = (array: (string | false)[]) => {
 		.map((v) => `Parameter ${v} not found`);
 };
 
-export const checkRegistrationParameters = (params: RegistrationParameters) => {
-	const fields = [!params.email && 'email', !params.password && 'password'];
+const generateErrors = (fields: (string | false)[]) => {
 	const errors = generateNotFoundParametersDescription(fields);
 	return errors.length ? errors : null;
 };
 
+export const checkRegistrationParameters = (params: RegistrationParameters) => {
+	const fields = [!params.email && 'email', !params.password && 'password'];
+	return generateErrors(fields);
+};
+
 export const checkAuthParameters = (params: AuthParameters) => {
 	const fields = [!params.email && 'email', !params.password && 'password'];
-	const errors = generateNotFoundParametersDescription(fields);
-	return errors.length ? errors : null;
+	return generateErrors(fields);
 };
 
 export const checkFavoriteInstrumentsParameters = (
 	params: FavoriteInstrumentsParameters
 ) => {
 	const fields = [!params.userUuid && 'userUuid'];
-	const errors = generateNotFoundParametersDescription(fields);
-	return errors.length ? errors : null;
+	return generateErrors(fields);
+};
+
+export const checkAddFavoriteInstrumentsParameters = (
+	params: AddFavoriteInstrumentsParameters
+) => {
+	const fields = [
+		!params.userUuid && 'userUuid',
+		!params.instrumentFigi && 'instrumentFigi',
+	];
+	return generateErrors(fields);
+};
+
+export const checkDeleteFavoriteInstrumentsParameters = (
+	params: DeleteFavoriteInstrumentsParameters
+) => {
+	const fields = [
+		!params.userUuid && 'userUuid',
+		!params.instrumentFigi && 'instrumentFigi',
+	];
+	return generateErrors(fields);
 };
 
 export const checkSearchParameters = (params: SearchParameters) => {
 	const fields = [!params.query && 'query'];
-	const errors = generateNotFoundParametersDescription(fields);
-	return errors.length ? errors : null;
+	return generateErrors(fields);
 };
