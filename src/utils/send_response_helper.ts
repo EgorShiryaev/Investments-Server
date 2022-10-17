@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { NOT_FOUND_ERRORS } from '../constants/errors';
+import { IS_EXISTS_ERRORS, NOT_FOUND_ERRORS } from '../constants/errors';
 
 const sendResponse = (response: Response, code: number, body?: object) => {
 	response.header('content-type', 'application/json');
@@ -32,6 +32,7 @@ export const sendSuccessResponse = (response: Response, body?: object) => {
 
 const serverErrorCode = 500;
 const itemNotFoundCode = 404;
+const itemIsExistsCode = 402;
 
 export const sendErrorResponse = (response: Response, error: Error) => {
 	const send = (code: number) => {
@@ -40,6 +41,8 @@ export const sendErrorResponse = (response: Response, error: Error) => {
 
 	if (NOT_FOUND_ERRORS.includes(error.message)) {
 		send(itemNotFoundCode);
+	} else if (IS_EXISTS_ERRORS.includes(error.message)) {
+		send(itemIsExistsCode);
 	} else {
 		send(serverErrorCode);
 	}

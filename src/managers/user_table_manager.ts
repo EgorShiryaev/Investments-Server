@@ -45,12 +45,12 @@ const edit = async (user: User) => {
 	return await databaseManager.runScript(script, params);
 };
 
-const get = async (uuid: string) => {
+const get = async (email: string) => {
 	const script = `SELECT * FROM ${tableTitle} 
-  WHERE uuid = $uuid`;
+  WHERE email = $email`;
 
 	const params = {
-		$uuid: uuid,
+		$email: email,
 	};
 
 	return await databaseManager.readFirst<User>(script, params);
