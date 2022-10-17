@@ -12,7 +12,9 @@ const beforeStartServer = async () => {
 		FavoriteInstrumentsTableManager.createTableIfNotExists(),
 	]);
 
-	await loadInstruments().catch((error) => console.log('start server error', error));
+	await loadInstruments().catch((error) =>
+		console.log('start server error', error)
+	);
 };
 
 const startServer = () => {

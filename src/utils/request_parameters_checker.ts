@@ -1,6 +1,6 @@
 import AuthParameters from '../interfaces/methods_parameters/auth_parameters';
 import RegistrationParameters from '../interfaces/methods_parameters/registration_parameters';
-import SearchParameters from '../interfaces/methods_parameters/search_parameters';
+import SearchInstrumnentsParameters from '../interfaces/methods_parameters/search_instrumnents_parameters';
 import FavoriteInstrumentsParameters from '../interfaces/methods_parameters/favorite_intruments_parameters';
 import AddFavoriteInstrumentsParameters from '../interfaces/methods_parameters/add_favorite_instruments_parameters';
 import DeleteFavoriteInstrumentsParameters from '../interfaces/methods_parameters/delete_favorite_instruments_parameters';
@@ -53,7 +53,9 @@ export const checkDeleteFavoriteInstrumentsParameters = (
 	return generateErrors(fields);
 };
 
-export const checkSearchParameters = (params: SearchParameters) => {
+export const checkSearchInstrumnentsParameters = (
+	params: SearchInstrumnentsParameters
+) => {
 	const fields = [!params.query && 'query'];
 	return generateErrors(fields);
 };
