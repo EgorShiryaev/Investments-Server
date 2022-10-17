@@ -1,4 +1,4 @@
-import RegistrationParameters from '../interfaces/registration_parameters';
+import RegistrationParameters from '../interfaces/methods_parameters/registration_parameters';
 import ServerMethodHandler from '../interfaces/server_method_handler';
 import registrationUser from '../usecases/registration_user';
 import { checkRegistrationParameters } from '../utils/request_parameters_checker';

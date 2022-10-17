@@ -1,6 +1,7 @@
-import AuthParameters from '../interfaces/auth_parameters';
-import RegistrationParameters from '../interfaces/registration_parameters';
-import SearchParameters from '../interfaces/search_parameters';
+import AuthParameters from '../interfaces/methods_parameters/auth_parameters';
+import RegistrationParameters from '../interfaces/methods_parameters/registration_parameters';
+import SearchParameters from '../interfaces/methods_parameters/search_parameters';
+import GetPortfolioParameters from '../interfaces/methods_parameters/get_portfolio_parameters';
 
 const generateNotFoundParametersDescription = (array: (string | false)[]) => {
 	return array
@@ -16,6 +17,12 @@ export const checkRegistrationParameters = (params: RegistrationParameters) => {
 
 export const checkAuthParameters = (params: AuthParameters) => {
 	const fields = [!params.email && 'email', !params.password && 'password'];
+	const errors = generateNotFoundParametersDescription(fields);
+	return errors.length ? errors : null;
+};
+
+export const checkGetPortfolioParameters = (params: GetPortfolioParameters) => {
+	const fields = [!params.userUuid && 'userUuid'];
 	const errors = generateNotFoundParametersDescription(fields);
 	return errors.length ? errors : null;
 };

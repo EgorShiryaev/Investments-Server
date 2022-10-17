@@ -1,10 +1,10 @@
 import Instrument from '../entities/instrument';
 import databaseManager from './database_manager';
 
-const tableTitle = 'Instruments';
+export const instrumentTableTitle = 'Instrument';
 
 const createTableIfNotExists = async () => {
-	const script = `CREATE TABLE IF NOT EXISTS ${tableTitle} (
+	const script = `CREATE TABLE IF NOT EXISTS ${instrumentTableTitle} (
     figi TEXT PRIMARY KEY, 
     ticker TEXT NOT NULL, 
     title TEXT NOT NULL,
@@ -17,7 +17,7 @@ const createTableIfNotExists = async () => {
 };
 
 const add = async (instrument: Instrument) => {
-	const script = `INSERT INTO ${tableTitle} 
+	const script = `INSERT INTO ${instrumentTableTitle} 
   (figi, ticker, title, lot, currency, instrumentType) 
   VALUES ($figi, $ticker, $title, $lot, $currency, $instrumentType)`;
 
@@ -49,7 +49,7 @@ const addSeveral = async (instruments: Instrument[]) => {
 		])
 		.flat();
 
-	const script = `INSERT INTO ${tableTitle} 
+	const script = `INSERT INTO ${instrumentTableTitle} 
   (figi, ticker, title, lot, currency, instrumentType) 
   VALUES ${placeholders}`;
 
@@ -57,7 +57,7 @@ const addSeveral = async (instruments: Instrument[]) => {
 };
 
 const edit = async (instrument: Instrument) => {
-	const script = `UPDATE ${tableTitle} 
+	const script = `UPDATE ${instrumentTableTitle} 
   SET ticker = $ticker, title = $title, lot = $lot, currency = $currency, instrumentType = $instrumentType
   WHERE figi = $figi`;
 
@@ -76,7 +76,7 @@ const edit = async (instrument: Instrument) => {
 };
 
 const get = async (figi: string) => {
-	const script = `SELECT * FROM ${tableTitle} 
+	const script = `SELECT * FROM ${instrumentTableTitle} 
   WHERE figi = $figi`;
 
 	const params = {
@@ -87,7 +87,7 @@ const get = async (figi: string) => {
 };
 
 const getAll = async () => {
-	const script = `SELECT * FROM ${tableTitle}
+	const script = `SELECT * FROM ${instrumentTableTitle}
   ORDER BY 
     title ASC
   `;
@@ -96,7 +96,7 @@ const getAll = async () => {
 };
 
 const getAllWhereQueryIsExists = async (query: string) => {
-	const script = `SELECT * FROM ${tableTitle} 
+	const script = `SELECT * FROM ${instrumentTableTitle} 
   WHERE 
     ticker LIKE $query 
     OR ticker LIKE $queryUppercase
@@ -123,7 +123,7 @@ const getAllWhereQueryIsExists = async (query: string) => {
 };
 
 const remove = async (figi: string) => {
-	const script = `DELETE FROM ${tableTitle} 
+	const script = `DELETE FROM ${instrumentTableTitle} 
     WHERE figi = $figi`;
 
 	const params = {
@@ -133,7 +133,7 @@ const remove = async (figi: string) => {
 	return await databaseManager.runScript(script, params);
 };
 
-const InstrumentsTableManager = {
+const InstrumentTableManager = {
 	createTableIfNotExists,
 	add,
 	addSeveral,
@@ -144,4 +144,4 @@ const InstrumentsTableManager = {
 	remove,
 };
 
-export default InstrumentsTableManager;
+export default InstrumentTableManager;

@@ -1,6 +1,6 @@
 import Instrument from '../../entities/instrument';
 import CreateOrEditInstrumentsResult from '../../entities/instrument_response_tinkoff_api';
-import InstrumentsTableManager from '../../managers/instruments_table_manager';
+import InstrumentTableManager from '../../managers/instrument_table_manager';
 import editInstrument from './edit_instrument';
 import getInstument from './get_instrument';
 
@@ -33,7 +33,7 @@ const createOrEditInstruments = async (
 	);
 
 	if (instrumentsNotExists.length > 0) {
-		await InstrumentsTableManager.addSeveral(instrumentsNotExists);
+		await InstrumentTableManager.addSeveral(instrumentsNotExists);
 	}
 
 	return {

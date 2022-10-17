@@ -1,6 +1,6 @@
 import { v4 as generateUuid } from 'uuid';
 import { USER_IS_EXISTS } from '../constants/errors';
-import RegistrationParameters from '../interfaces/registration_parameters';
+import RegistrationParameters from '../interfaces/methods_parameters/registration_parameters';
 import UserTableManager from '../managers/user_table_manager';
 
 const registrationUser = async (params: RegistrationParameters) => {

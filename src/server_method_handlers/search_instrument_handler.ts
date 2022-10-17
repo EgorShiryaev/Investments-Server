@@ -1,4 +1,4 @@
-import SearchParameters from '../interfaces/search_parameters';
+import SearchParameters from '../interfaces/methods_parameters/search_parameters';
 import ServerMethodHandler from '../interfaces/server_method_handler';
 import searchInstrument from '../usecases/instrument/search_instrument';
 import { checkSearchParameters } from '../utils/request_parameters_checker';

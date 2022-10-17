@@ -1,4 +1,4 @@
-import AuthParameters from '../interfaces/auth_parameters';
+import AuthParameters from '../interfaces/methods_parameters/auth_parameters';
 import ServerMethodHandler from '../interfaces/server_method_handler';
 import authUser from '../usecases/auth_user';
 import { checkAuthParameters } from '../utils/request_parameters_checker';

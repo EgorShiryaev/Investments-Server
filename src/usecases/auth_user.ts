@@ -1,5 +1,5 @@
 import { USER_NOT_FOUND } from '../constants/errors';
-import AuthParameters from '../interfaces/auth_parameters';
+import AuthParameters from '../interfaces/methods_parameters/auth_parameters';
 import UserTableManager from '../managers/user_table_manager';
 
 const authUser = async (params: AuthParameters) => {

@@ -1,6 +1,6 @@
 import Instrument from '../../entities/instrument';
 import InvestmentList from '../../entities/investment_list';
-import InstrumentsTableManager from '../../managers/instruments_table_manager';
+import InstrumentsTableManager from '../../managers/instrument_table_manager';
 import { convertToInvestmentList } from '../../utils/convector';
 
 const searchInstrument = async (

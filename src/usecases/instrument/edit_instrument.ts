@@ -1,9 +1,9 @@
 import Instrument from '../../entities/instrument';
-import InstrumentsTableManager from '../../managers/instruments_table_manager';
+import InstrumentTableManager from '../../managers/instrument_table_manager';
 import getInstument from './get_instrument';
 
 const editInstrument = async (instrument: Instrument) => {
-	await InstrumentsTableManager.edit(instrument);
+	await InstrumentTableManager.edit(instrument);
 
 	return await getInstument(instrument.figi);
 };
