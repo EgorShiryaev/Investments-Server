@@ -3,28 +3,28 @@ import ServerMethodHandler from '../interfaces/server_method_handler';
 import getUserFavoriteIntruments from '../usecases/get_user_favorite_intruments';
 import { checkFavoriteInstrumentsParameters } from '../utils/request_parameters_checker';
 import {
-	sendErrorResponse,
-	sendParameterNotFoundResponse,
-	sendSuccessResponse,
+  sendErrorResponse,
+  sendParameterNotFoundResponse,
+  sendSuccessResponse,
 } from '../utils/send_response_helper';
 
 const favoriteInstrumentsHandler: ServerMethodHandler = (request, response) => {
-	const params = request.query as unknown as FavoriteInstrumentsParameters;
+  const params = request.query as unknown as FavoriteInstrumentsParameters;
 
-	const errors = checkFavoriteInstrumentsParameters(params);
+  const errors = checkFavoriteInstrumentsParameters(params);
 
-	if (errors) {
-		sendParameterNotFoundResponse(response, errors);
-		return;
-	}
+  if (errors) {
+    sendParameterNotFoundResponse(response, errors);
+    return;
+  }
 
-	getUserFavoriteIntruments(params.userUuid)
-		.then((value) => {
-			sendSuccessResponse(response, value);
-		})
-		.catch((error) => {
-			sendErrorResponse(response, error);
-		});
+  getUserFavoriteIntruments(params.userUuid)
+    .then((value) => {
+      sendSuccessResponse(response, value);
+    })
+    .catch((error) => {
+      sendErrorResponse(response, error);
+    });
 };
 
 export default favoriteInstrumentsHandler;

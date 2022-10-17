@@ -3,31 +3,31 @@ import ServerMethodHandler from '../interfaces/server_method_handler';
 import addToFavoriteInstruments from '../usecases/add_to_favorite_instruments';
 import { checkDeleteFavoriteInstrumentsParameters } from '../utils/request_parameters_checker';
 import {
-	sendErrorResponse,
-	sendParameterNotFoundResponse,
-	sendSuccessResponse,
+  sendErrorResponse,
+  sendParameterNotFoundResponse,
+  sendSuccessResponse,
 } from '../utils/send_response_helper';
 
 const addFavoriteInstrumentsHandler: ServerMethodHandler = (
-	request,
-	response
+  request,
+  response
 ) => {
-	const params: AddFavoriteInstrumentsParameters = request.body;
+  const params: AddFavoriteInstrumentsParameters = request.body;
 
-	const errors = checkDeleteFavoriteInstrumentsParameters(params);
+  const errors = checkDeleteFavoriteInstrumentsParameters(params);
 
-	if (errors) {
-		sendParameterNotFoundResponse(response, errors);
-		return;
-	}
+  if (errors) {
+    sendParameterNotFoundResponse(response, errors);
+    return;
+  }
 
-	addToFavoriteInstruments(params)
-		.then(() => {
-			sendSuccessResponse(response);
-		})
-		.catch((error: Error) => {
-			sendErrorResponse(response, error);
-		});
+  addToFavoriteInstruments(params)
+    .then(() => {
+      sendSuccessResponse(response);
+    })
+    .catch((error: Error) => {
+      sendErrorResponse(response, error);
+    });
 };
 
 export default addFavoriteInstrumentsHandler;

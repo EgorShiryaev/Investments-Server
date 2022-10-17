@@ -4,15 +4,15 @@ import checkUserIsExists from './chech_user_is_exists';
 import getInstument from './instrument/get_instrument';
 
 const getUserFavoriteIntruments = async (userUuid: string) => {
-	await checkUserIsExists(userUuid);
+  await checkUserIsExists(userUuid);
 
-	const records = await FavoriteInstrumentsTableManager.getAll(userUuid);
+  const records = await FavoriteInstrumentsTableManager.getAll(userUuid);
 
-	const instruments = await Promise.all(
-		records.map((v) => getInstument(v.instrumentFigi))
-	);
+  const instruments = await Promise.all(
+    records.map((v) => getInstument(v.instrumentFigi))
+  );
 
-	return convertToInvestmentList(instruments);
+  return convertToInvestmentList(instruments);
 };
 
 export default getUserFavoriteIntruments;

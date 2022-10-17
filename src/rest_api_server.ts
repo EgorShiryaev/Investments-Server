@@ -16,14 +16,14 @@ server.post('/auth', jsonParser, authHandler);
 const favoriteInstrumentsPath = '/favoriteInstruments';
 server.get(favoriteInstrumentsPath, favoriteInstrumentsHandler);
 server.post(
-	`${favoriteInstrumentsPath}/add`,
-	jsonParser,
-	addFavoriteInstrumentsHandler
+  `${favoriteInstrumentsPath}/add`,
+  jsonParser,
+  addFavoriteInstrumentsHandler
 );
 server.delete(
-	`${favoriteInstrumentsPath}/delete`,
-	jsonParser,
-	deleteFavoriteInstrumentsHandler
+  `${favoriteInstrumentsPath}/delete`,
+  jsonParser,
+  deleteFavoriteInstrumentsHandler
 );
 
 server.get('/instruments/search', searchInstrumentsHandler);

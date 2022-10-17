@@ -6,31 +6,31 @@ import FavoriteInstrumentsTableManager from './managers/favorite_intruments_tabl
 import loadInstruments from './usecases/load_instruments/load_instruments';
 
 const beforeStartServer = async () => {
-	await Promise.all([
-		UserTableManager.createTableIfNotExists(),
-		InstrumentTableManager.createTableIfNotExists(),
-		FavoriteInstrumentsTableManager.createTableIfNotExists(),
-	]);
+  await Promise.all([
+    UserTableManager.createTableIfNotExists(),
+    InstrumentTableManager.createTableIfNotExists(),
+    FavoriteInstrumentsTableManager.createTableIfNotExists(),
+  ]);
 
-	await loadInstruments().catch((error) =>
-		console.log('start server error', error)
-	);
+  await loadInstruments().catch((error) =>
+    console.log('start server error', error)
+  );
 };
 
 const startServer = () => {
-	const app = express();
+  const app = express();
 
-	beforeStartServer()
-		.then(() => {
-			app.listen(Settings.serverPort, Settings.serverUrl, () => {
-				console.log('Success start server');
-			});
-		})
-		.catch((error) => {
-			console.log('Fail start server', error);
-		});
+  beforeStartServer()
+    .then(() => {
+      app.listen(Settings.serverPort, Settings.serverUrl, () => {
+        console.log('Success start server');
+      });
+    })
+    .catch((error) => {
+      console.log('Fail start server', error);
+    });
 
-	return app;
+  return app;
 };
 
 export default startServer;

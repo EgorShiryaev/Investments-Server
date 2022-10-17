@@ -3,28 +3,28 @@ import ServerMethodHandler from '../interfaces/server_method_handler';
 import authUser from '../usecases/auth_user';
 import { checkAuthParameters } from '../utils/request_parameters_checker';
 import {
-	sendErrorResponse,
-	sendParameterNotFoundResponse,
-	sendSuccessResponse,
+  sendErrorResponse,
+  sendParameterNotFoundResponse,
+  sendSuccessResponse,
 } from '../utils/send_response_helper';
 
 const authHandler: ServerMethodHandler = (request, response) => {
-	const params: AuthParameters = request.body;
+  const params: AuthParameters = request.body;
 
-	const errors = checkAuthParameters(params);
+  const errors = checkAuthParameters(params);
 
-	if (errors) {
-		sendParameterNotFoundResponse(response, errors);
-		return;
-	}
+  if (errors) {
+    sendParameterNotFoundResponse(response, errors);
+    return;
+  }
 
-	authUser(params)
-		.then((uuid) => {
-			sendSuccessResponse(response, { userUuid: uuid });
-		})
-		.catch((error: Error) => {
-			sendErrorResponse(response, error);
-		});
+  authUser(params)
+    .then((uuid) => {
+      sendSuccessResponse(response, { userUuid: uuid });
+    })
+    .catch((error: Error) => {
+      sendErrorResponse(response, error);
+    });
 };
 
 export default authHandler;
