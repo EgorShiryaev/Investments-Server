@@ -4,23 +4,23 @@ import RegistrationParameters from '../interfaces/methods_parameters/registratio
 import UserTableManager from '../managers/user_table_manager';
 
 const registrationUser = async (params: RegistrationParameters) => {
-	const { email, password } = params;
+  const { email, password } = params;
 
-	const user = await UserTableManager.getWhereEmail(email);
+  const user = await UserTableManager.getWhereEmail(email);
 
-	if (user !== undefined) {
-		throw Error(USER_IS_EXISTS);
-	}
+  if (user !== undefined) {
+    throw Error(USER_IS_EXISTS);
+  }
 
-	const uuid = generateUuid();
+  const uuid = generateUuid();
 
-	await UserTableManager.add({
-		uuid: uuid,
-		email: email,
-		password: password,
-	});
+  await UserTableManager.add({
+    uuid: uuid,
+    email: email,
+    password: password,
+  });
 
-	return uuid;
+  return uuid;
 };
 
 export default registrationUser;

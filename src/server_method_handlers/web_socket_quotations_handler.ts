@@ -12,16 +12,16 @@
 // import WebSocketOperation from '../interfaces/web_socket_operation';
 
 const webSocketQuantitionsHandler = (
-	// ws: WebSocket.WebSocket,
-	// request: IncomingMessage
+  // ws: WebSocket.WebSocket,
+  // request: IncomingMessage
 ) => {
-	// const userUuid = getUserUuidGetParams(request.url);
-	// if (userUuid === null) {
-	// 	ws.send(
-	// 		parseToJson({ status: 'fail', message: 'parameter "userUuid" not found' })
-	// 	);
-	// 	ws.close();
-	// 	return;
+  // const userUuid = getUserUuidGetParams(request.url);
+  // if (userUuid === null) {
+  // 	ws.send(
+  // 		parseToJson({ status: 'fail', message: 'parameter "userUuid" not found' })
+  // 	);
+  // 	ws.close();
+  // 	return;
 };
 
 // 	console.log('connect userUuid:', userUuid);

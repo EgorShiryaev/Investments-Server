@@ -6,56 +6,56 @@ import AddFavoriteInstrumentsParameters from '../interfaces/methods_parameters/a
 import DeleteFavoriteInstrumentsParameters from '../interfaces/methods_parameters/delete_favorite_instruments_parameters';
 
 const generateNotFoundParametersDescription = (array: (string | false)[]) => {
-	return array
-		.filter((v) => v !== false)
-		.map((v) => `Parameter ${v} not found`);
+  return array
+    .filter((v) => v !== false)
+    .map((v) => `Parameter ${v} not found`);
 };
 
 const generateErrors = (fields: (string | false)[]) => {
-	const errors = generateNotFoundParametersDescription(fields);
-	return errors.length ? errors : null;
+  const errors = generateNotFoundParametersDescription(fields);
+  return errors.length ? errors : null;
 };
 
 export const checkRegistrationParameters = (params: RegistrationParameters) => {
-	const fields = [!params.email && 'email', !params.password && 'password'];
-	return generateErrors(fields);
+  const fields = [!params.email && 'email', !params.password && 'password'];
+  return generateErrors(fields);
 };
 
 export const checkAuthParameters = (params: AuthParameters) => {
-	const fields = [!params.email && 'email', !params.password && 'password'];
-	return generateErrors(fields);
+  const fields = [!params.email && 'email', !params.password && 'password'];
+  return generateErrors(fields);
 };
 
 export const checkFavoriteInstrumentsParameters = (
-	params: FavoriteInstrumentsParameters
+  params: FavoriteInstrumentsParameters
 ) => {
-	const fields = [!params.userUuid && 'userUuid'];
-	return generateErrors(fields);
+  const fields = [!params.userUuid && 'userUuid'];
+  return generateErrors(fields);
 };
 
 export const checkAddFavoriteInstrumentsParameters = (
-	params: AddFavoriteInstrumentsParameters
+  params: AddFavoriteInstrumentsParameters
 ) => {
-	const fields = [
-		!params.userUuid && 'userUuid',
-		!params.instrumentFigi && 'instrumentFigi',
-	];
-	return generateErrors(fields);
+  const fields = [
+    !params.userUuid && 'userUuid',
+    !params.instrumentFigi && 'instrumentFigi',
+  ];
+  return generateErrors(fields);
 };
 
 export const checkDeleteFavoriteInstrumentsParameters = (
-	params: DeleteFavoriteInstrumentsParameters
+  params: DeleteFavoriteInstrumentsParameters
 ) => {
-	const fields = [
-		!params.userUuid && 'userUuid',
-		!params.instrumentFigi && 'instrumentFigi',
-	];
-	return generateErrors(fields);
+  const fields = [
+    !params.userUuid && 'userUuid',
+    !params.instrumentFigi && 'instrumentFigi',
+  ];
+  return generateErrors(fields);
 };
 
 export const checkSearchInstrumnentsParameters = (
-	params: SearchInstrumnentsParameters
+  params: SearchInstrumnentsParameters
 ) => {
-	const fields = [!params.query && 'query'];
-	return generateErrors(fields);
+  const fields = [!params.query && 'query'];
+  return generateErrors(fields);
 };

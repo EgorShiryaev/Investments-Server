@@ -5,16 +5,18 @@ import { convertItemToInstrument } from '../../utils/convector_tinkoff_invest_ap
 import createOrEditInstruments from '../instrument/create_or_edit_instruments';
 
 const loadEtfs = async () => {
-	return await TINKOFF_INVEST_API.instruments
-		.etfs({
-			instrumentStatus: InstrumentStatus.INSTRUMENT_STATUS_ALL
-		})
-		.then(async (response) => {
-			const instruments = response.instruments.map((value) =>
-				convertItemToInstrument(value, InstrumentType.etf)
-			);
-			return await createOrEditInstruments(instruments);
-		});
+  const etfs = await TINKOFF_INVEST_API.instruments
+    .etfs({
+      instrumentStatus: InstrumentStatus.INSTRUMENT_STATUS_ALL,
+    })
+    .then(async (response) => {
+      return response.instruments.map((value) =>
+        convertItemToInstrument(value, InstrumentType.etf)
+      );
+    });
+   
+
+  return createOrEditInstruments(etfs);
 };
 
 export default loadEtfs;
