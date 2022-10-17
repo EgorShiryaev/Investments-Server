@@ -5,6 +5,7 @@ import registrationHandler from './server_method_handlers/registration_handler';
 import favoriteInstrumentsHandler from './server_method_handlers/favorite_instruments_handler';
 import addFavoriteInstrumentsHandler from './server_method_handlers/add_favorite_instruments_handler';
 import deleteFavoriteInstrumentsHandler from './server_method_handlers/delete_favorite_instruments_handler';
+import searchInstrumentsHandler from './server_method_handlers/search_instruments_handler';
 
 const server = startServer();
 const jsonParser = express.json();
@@ -24,3 +25,5 @@ server.delete(
 	jsonParser,
 	deleteFavoriteInstrumentsHandler
 );
+
+server.get('/instruments/search', searchInstrumentsHandler);

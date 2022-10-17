@@ -2,7 +2,7 @@ import databaseManager from './database_manager';
 import { instrumentTableTitle } from './instrument_table_manager';
 import { userTableTitle } from './user_table_manager';
 
-interface PortfolioTableRecord {
+interface FavoriteInstrumentsTableRecord {
   userUuid: string;
   instrumentFigi: string;
 }
@@ -40,7 +40,9 @@ const add = async (userUuid: string, instrumentFigi: string) => {
 	return await databaseManager.runScript(script, params);
 };
 
-const getAll = async (userUuid: string): Promise<PortfolioTableRecord[]> => {
+const getAll = async (
+	userUuid: string
+): Promise<FavoriteInstrumentsTableRecord[]> => {
 	const script = `SELECT * FROM ${tableTitle}
         WHERE userUuid = $userUuid`;
 
@@ -48,7 +50,7 @@ const getAll = async (userUuid: string): Promise<PortfolioTableRecord[]> => {
 		$userUuid: userUuid,
 	};
 
-	return await databaseManager.readAll<PortfolioTableRecord>(script, params);
+	return await databaseManager.readAll(script, params);
 };
 
 const get = async (userUuid: string, instrumentFigi: string) => {
@@ -60,7 +62,10 @@ const get = async (userUuid: string, instrumentFigi: string) => {
 		$instrumentFigi: instrumentFigi,
 	};
 
-	return await databaseManager.readFirst<PortfolioTableRecord>(script, params);
+	return await databaseManager.readFirst<FavoriteInstrumentsTableRecord>(
+		script,
+		params
+	);
 };
 
 const remove = async (userUuid: string, instrumentFigi: string) => {
