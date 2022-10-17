@@ -45,12 +45,24 @@ const edit = async (user: User) => {
 	return await databaseManager.runScript(script, params);
 };
 
-const get = async (email: string) => {
+const getWhereEmail = async (email: string) => {
 	const script = `SELECT * FROM ${tableTitle} 
   WHERE email = $email`;
 
 	const params = {
 		$email: email,
+	};
+
+	return await databaseManager.readFirst<User>(script, params);
+};
+
+const getWhereEmailWithPassword = async (email: string, password: string) => {
+	const script = `SELECT * FROM ${tableTitle} 
+  WHERE email = $email AND password = $password`;
+
+	const params = {
+		$email: email,
+		$password: password,
 	};
 
 	return await databaseManager.readFirst<User>(script, params);
@@ -67,6 +79,13 @@ const remove = async (uuid: string) => {
 	return await databaseManager.runScript(script, params);
 };
 
-const UserTableManager = { createTableIfNotExists, add, edit, get, remove };
+const UserTableManager = {
+	createTableIfNotExists,
+	add,
+	edit,
+	getWhereEmail,
+	getWhereEmailWithPassword,
+	remove,
+};
 
 export default UserTableManager;

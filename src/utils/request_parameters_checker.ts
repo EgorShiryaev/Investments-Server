@@ -1,3 +1,4 @@
+import AuthParameters from '../interfaces/auth_parameters';
 import RegistrationParameters from '../interfaces/registration_parameters';
 import SearchParameters from '../interfaces/search_parameters';
 
@@ -8,6 +9,12 @@ const generateNotFoundParametersDescription = (array: (string | false)[]) => {
 };
 
 export const checkRegistrationParameters = (params: RegistrationParameters) => {
+	const fields = [!params.email && 'email', !params.password && 'password'];
+	const errors = generateNotFoundParametersDescription(fields);
+	return errors.length ? errors : null;
+};
+
+export const checkAuthParameters = (params: AuthParameters) => {
 	const fields = [!params.email && 'email', !params.password && 'password'];
 	const errors = generateNotFoundParametersDescription(fields);
 	return errors.length ? errors : null;
