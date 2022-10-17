@@ -2,13 +2,13 @@ import express from 'express';
 import InstrumentTableManager from './managers/instrument_table_manager';
 import UserTableManager from './managers/user_table_manager';
 import Settings from '../settings';
-import PortfolioTableManager from './managers/portfolio_table_manager';
+import FavoriteInstrumentsTableManager from './managers/favorite_intruments_table_manager';
 
 const beforeStartServer = async () => {
 	await Promise.all([
 		UserTableManager.createTableIfNotExists(),
 		InstrumentTableManager.createTableIfNotExists(),
-		PortfolioTableManager.createTableIfNotExists(),
+		FavoriteInstrumentsTableManager.createTableIfNotExists(),
 	]);
 
 	// await loadInstruments();

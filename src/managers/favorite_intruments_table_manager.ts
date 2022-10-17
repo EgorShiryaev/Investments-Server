@@ -7,7 +7,7 @@ interface PortfolioTableRecord {
   instrumentFigi: string;
 }
 
-const tableTitle = 'Portfolio';
+const tableTitle = 'FavoriteInstruments';
 
 const createTableIfNotExists = async () => {
 	const script = `CREATE TABLE IF NOT EXISTS ${tableTitle} (
@@ -74,7 +74,7 @@ const remove = async (userUuid: string, instrumentFigi: string) => {
 
 	return await databaseManager.runScript(script, params);
 };
-const PortfolioTableManager = {
+const FavoriteInstrumentsTableManager = {
 	createTableIfNotExists,
 	add,
 	get,
@@ -82,4 +82,4 @@ const PortfolioTableManager = {
 	remove,
 };
 
-export default PortfolioTableManager;
+export default FavoriteInstrumentsTableManager;
