@@ -133,7 +133,7 @@ const remove = async (figi: string) => {
 	return await databaseManager.runScript(script, params);
 };
 
-const instrumentsTableManager = {
+const InstrumentsTableManager = {
 	createTableIfNotExists,
 	add,
 	addSeveral,
@@ -144,4 +144,4 @@ const instrumentsTableManager = {
 	remove,
 };
 
-export default instrumentsTableManager;
+export default InstrumentsTableManager;

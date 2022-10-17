@@ -1,21 +1,10 @@
 import express from 'express';
-import Settings from '../settings';
-import beforeStartServer from './before_start_server';
+import startServer from './start_server';
 import authHandler from './server_method_handlers/auth_handler';
 import registrationHandler from './server_method_handlers/registration_handler';
 
-const app = express();
+const server = startServer();
 const jsonParser = express.json();
 
-beforeStartServer()
-	.then(() => {
-		app.listen(Settings.serverPort, Settings.serverUrl, () => {
-			console.log('Success start server');
-		});
-	})
-	.catch((error) => {
-		console.log('Fail start server', error);
-	});
-
-app.post('/registration', jsonParser, registrationHandler);
-app.post('/auth', jsonParser, authHandler);
+server.post('/registration', jsonParser, registrationHandler);
+server.post('/auth', jsonParser, authHandler);
