@@ -1,15 +1,10 @@
-import { USER_NOT_FOUND } from '../constants/errors';
 import FavoriteInstrumentsTableManager from '../managers/favorite_intruments_table_manager';
-import UserTableManager from '../managers/user_table_manager';
 import { convertToInvestmentList } from '../utils/convector';
+import checkUserIsExists from './chech_user_is_exists';
 import getInstument from './instrument/get_instrument';
 
 const getUserFavoriteIntruments = async (userUuid: string) => {
-	const user = await UserTableManager.getWhereUuid(userUuid);
-
-	if (user === undefined) {
-		throw Error(USER_NOT_FOUND);
-	}
+	await checkUserIsExists(userUuid);
 
 	const records = await FavoriteInstrumentsTableManager.getAll(userUuid);
 

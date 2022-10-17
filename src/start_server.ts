@@ -3,6 +3,7 @@ import InstrumentTableManager from './managers/instrument_table_manager';
 import UserTableManager from './managers/user_table_manager';
 import Settings from '../settings';
 import FavoriteInstrumentsTableManager from './managers/favorite_intruments_table_manager';
+import loadInstruments from './usecases/load_instruments/load_instruments';
 
 const beforeStartServer = async () => {
 	await Promise.all([
@@ -11,7 +12,7 @@ const beforeStartServer = async () => {
 		FavoriteInstrumentsTableManager.createTableIfNotExists(),
 	]);
 
-	// await loadInstruments();
+	await loadInstruments().catch((error) => console.log('start server error', error));
 };
 
 const startServer = () => {
