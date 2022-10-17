@@ -11,8 +11,6 @@ import {
 const registrationHandler: ServerMethodHandler = (request, response) => {
 	const params: RegistrationParameters = request.body;
 
-	console.log('params', params);
-
 	const errors = checkRegistrationParameters(params);
 
 	if (errors) {
