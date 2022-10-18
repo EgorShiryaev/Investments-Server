@@ -35,3 +35,7 @@ export const convertToInvestmentList = (
     return prev;
   }, initialList);
 };
+
+export const convertToJson = (obj:object) => {
+  return JSON.stringify(obj);
+};

@@ -1,89 +1,104 @@
-// import { IncomingMessage } from 'http';
-// import WebSocket from 'ws';
-// import {
-// 	getUserUuidGetParams,
-// 	parseToJson
-// } from '../utils/request_parameter_parser';
-// import {
-// 	investmentFigiPriceRepository,
-// 	userSubscribeInvestmentFigisRepository
-// } from '../repositories';
-// import Quotation from '../entities/quotation';
-// import WebSocketOperation from '../interfaces/web_socket_operation';
+import { IncomingMessage } from 'http';
+import WebSocket from 'ws';
+import Quotation from '../entities/quotation';
+import WebSocketOperation from '../interfaces/web_socket_operation';
+import { convertToJson } from '../utils/convector';
+import UserSubscribeInvestmentFigisRepository from '../repositories/user_subscribe_investment_figis_repository';
+import InvestmentFigiPriceRepository from '../repositories/investment_figi_price_repository';
+import WebSocketMessage from '../interfaces/web_socket_message';
 
-const webSocketQuantitionsHandler = (
-  // ws: WebSocket.WebSocket,
-  // request: IncomingMessage
-) => {
-  // const userUuid = getUserUuidGetParams(request.url);
-  // if (userUuid === null) {
-  // 	ws.send(
-  // 		parseToJson({ status: 'fail', message: 'parameter "userUuid" not found' })
-  // 	);
-  // 	ws.close();
-  // 	return;
+const getUserUuid = (url?: string) => {
+  if (url === undefined) {
+    return undefined;
+  }
+  const params = url.split('?')[1].split('&');
+
+  const obj = new Map<string, string>();
+
+  for (const iterator of params) {
+    const [key, value] = iterator.split('=');
+    obj.set(key, value);
+  }
+
+  return obj.get('userUuid');
 };
 
-// 	console.log('connect userUuid:', userUuid);
+const webSocketQuantitionsHandler = (
+  ws: WebSocket.WebSocket,
+  request: IncomingMessage
+) => {
+  const userUuid = getUserUuid(request.url);
 
-// 	ws.on('message', (raw) => messsageHandler(raw, userUuid));
+  if (userUuid == undefined) {
+    ws.send(
+      convertToJson({
+        status: 'fail',
+        message: 'userUuid not fount',
+      })
+    );
+    ws.close();
+    return;
+  }
 
-// 	const responseInterval = setResponseInterval(ws, userUuid);
+  console.log('connect userUuid:', userUuid);
 
-// 	ws.on('close', () => closeHandler(ws, responseInterval, userUuid));
-// };
+  ws.on('message', (raw) => messsageHandler(raw, userUuid));
 
-// const messsageHandler = (data: WebSocket.RawData, userUuid: string): void => {
-// 	// @ts-expect-error
-// 	const { operation, figi }: WebSocketMessage = JSON.parse(data);
+  const responseInterval = setResponseInterval(ws, userUuid);
 
-// 	if (operation === WebSocketOperation.subscribe) {
-// 		userSubscribeInvestmentFigisRepository.addUserInvestmentFigi(
-// 			userUuid,
-// 			figi
-// 		);
-// 	} else if (operation === WebSocketOperation.unsubscribe) {
-// 		userSubscribeInvestmentFigisRepository.deleteUserInvestmentFigi(
-// 			userUuid,
-// 			figi
-// 		);
-// 	}
-// };
+  ws.on('close', () => closeHandler(ws, responseInterval, userUuid));
+};
 
-// const timerMs = 2000;
+const messsageHandler = (data: WebSocket.RawData, userUuid: string): void => {
+  const { operation, figi }: WebSocketMessage = JSON.parse(data.toString());
 
-// const setResponseInterval = (
-// 	ws: WebSocket.WebSocket,
-// 	userUuid: string
-// ): NodeJS.Timer => {
-// 	return setInterval(() => {
-// 		// @ts-expect-error
-// 		const quotations: Quotation[] = userSubscribeInvestmentFigisRepository
-// 			.getUserInvestmentFigis(userUuid)
-// 			.map((v) => {
-// 				const price = investmentFigiPriceRepository.getPrice(v);
-// 				if (price !== null) {
-// 					return {
-// 						figi: v,
-// 						price
-// 					};
-// 				}
-// 				return null;
-// 			})
-// 			.filter((v) => v !== null);
-// 		ws.send(parseToJson({ quotations }));
-// 	}, timerMs);
-// };
+  if (operation === WebSocketOperation.subscribe) {
+    UserSubscribeInvestmentFigisRepository.addUserInvestmentFigi(
+      userUuid,
+      figi
+    );
+  } else if (operation === WebSocketOperation.unsubscribe) {
+    UserSubscribeInvestmentFigisRepository.deleteUserInvestmentFigi(
+      userUuid,
+      figi
+    );
+  }
+};
 
-// const closeHandler = (
-// 	ws: WebSocket.WebSocket,
-// 	interval: NodeJS.Timer,
-// 	userUuid: string
-// ): void => {
-// 	console.log('close userUuid:', userUuid);
-// 	userSubscribeInvestmentFigisRepository.deleteAllUserInvestmentFigis(userUuid);
-// 	clearInterval(interval);
-// 	ws.close();
-// };
+const setResponseInterval = (
+  ws: WebSocket.WebSocket,
+  userUuid: string
+): NodeJS.Timer => {
+  return setInterval(() => {
+    const figis =
+      UserSubscribeInvestmentFigisRepository.getUserInvestmentFigis(userUuid);
+
+    const quotations: Quotation[] = [];
+
+    figis.forEach((v) => {
+      const price = InvestmentFigiPriceRepository.getPrice(v);
+      if (price !== null) {
+        quotations.push({
+          figi: v,
+          price: price,
+        });
+      }
+    });
+
+    ws.send(convertToJson({ quotations: quotations }));
+  }, 500);
+};
+
+const closeHandler = (
+  ws: WebSocket.WebSocket,
+  interval: NodeJS.Timer,
+  userUuid: string
+): void => {
+  console.log('close userUuid:', userUuid);
+
+  UserSubscribeInvestmentFigisRepository.deleteAllUserInvestmentFigis(userUuid);
+  clearInterval(interval);
+  ws.close();
+};
 
 export default webSocketQuantitionsHandler;

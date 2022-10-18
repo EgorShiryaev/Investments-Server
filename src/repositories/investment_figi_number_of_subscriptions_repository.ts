@@ -3,7 +3,7 @@ import unsubscribeLastPriceInvestment from '../usecases/unsubscribe_last_price_i
 
 const investmentFigiNumberOfSubscriptionsRepository = new Map<string, number>();
 
-const incrementSubscribtion = (figi: string)=> {
+const incrementSubscribtion = (figi: string) => {
   const numberOfSubscriptions =
     investmentFigiNumberOfSubscriptionsRepository.get(figi);
 
@@ -18,15 +18,15 @@ const incrementSubscribtion = (figi: string)=> {
   }
 };
 
-const decrementSubscribtion = (figi: string)=> {
+const decrementSubscribtion = (figi: string) => {
   const numberOfSubscriptions =
     investmentFigiNumberOfSubscriptionsRepository.get(figi);
 
-  if (numberOfSubscriptions === 0) {
+  if (numberOfSubscriptions === 1) {
     unsubscribeLastPriceInvestment(figi);
   }
 
-  if (!(numberOfSubscriptions === undefined || numberOfSubscriptions === 0)) {
+  if ((numberOfSubscriptions !== undefined && numberOfSubscriptions > 0 )) {
     investmentFigiNumberOfSubscriptionsRepository.set(
       figi,
       numberOfSubscriptions - 1
@@ -41,5 +41,5 @@ const deleteAllSubscribtions = () => {
 export default {
   incrementSubscribtion,
   decrementSubscribtion,
-  deleteAllSubscribtions
+  deleteAllSubscribtions,
 };
