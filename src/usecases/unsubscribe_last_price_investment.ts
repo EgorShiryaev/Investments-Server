@@ -15,7 +15,7 @@ const unsubscribeLastPriceInvestment = (figi: string) => {
   };
 
   TINKOFF_INVEST_API.stream.market.lastPrice(request, () => {
-    console.log('Unsubscribe');
+    figi;
   });
 };
 

@@ -25,8 +25,11 @@ const addUserInvestmentFigi = (userUuid: string, figi: string) => {
 };
 
 const deleteUserInvestmentFigi = (userUuid: string, figi: string) => {
-  investmentFigiNumberOfSubscriptionsRepository.decrementSubscribtion(figi);
   const currentUserFigis = userSubscribeInvestmentFigisRepository.get(userUuid);
+
+  if (currentUserFigis?.includes(figi)) {
+    investmentFigiNumberOfSubscriptionsRepository.decrementSubscribtion(figi);
+  }
 
   if (currentUserFigis != null) {
     const newUserFigis = [...currentUserFigis].filter((v) => v !== figi);
@@ -43,5 +46,5 @@ export default {
   getUserInvestmentFigis,
   addUserInvestmentFigi,
   deleteUserInvestmentFigi,
-  deleteAllUserInvestmentFigis
+  deleteAllUserInvestmentFigis,
 };

@@ -1,9 +1,9 @@
-import CreateOrEditInstrumentsResult from "../../entities/instrument_response_tinkoff_api";
-import loadBonds from "./load_bonds";
-import loadCurrencies from "./load_currency";
-import loadEtfs from "./load_etfs";
-import loadFutures from "./load_futures";
-import loadShares from "./load_shares";
+import CreateOrEditInstrumentsResult from '../../entities/instrument_response_tinkoff_api';
+import loadBonds from './load_bonds';
+import loadCurrencies from './load_currency';
+import loadEtfs from './load_etfs';
+import loadFutures from './load_futures';
+import loadShares from './load_shares';
 
 const getGeneralResult = (results: CreateOrEditInstrumentsResult[]) => {
   const initial = {
@@ -41,7 +41,7 @@ const loadInstruments = async () => {
 
   const generalResult = getGeneralResult(results);
 
-  console.log("load result", generalResult);
+  console.log('load result', generalResult);
 };
 
 export default loadInstruments;

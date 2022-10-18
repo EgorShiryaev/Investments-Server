@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import { IS_EXISTS_ERRORS, NOT_FOUND_ERRORS } from '../constants/errors';
+import { convertToJson } from './convector';
 
 const sendResponse = (response: Response, code: number, body?: object) => {
   response.header('content-type', 'application/json');
@@ -10,7 +11,7 @@ const sendResponse = (response: Response, code: number, body?: object) => {
     resWithStatus.send();
     return;
   }
-  resWithStatus.send(JSON.stringify(body));
+  resWithStatus.send(convertToJson(body));
 };
 
 const parameterNotFoundCode = 400;
