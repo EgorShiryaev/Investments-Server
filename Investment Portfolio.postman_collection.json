@@ -1,0 +1,195 @@
+{
+	"info": {
+		"_postman_id": "b7fc35aa-2a4e-4390-b790-656af54ff3b8",
+		"name": "Investment Portfolio",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16026953"
+	},
+	"item": [
+		{
+			"name": "/registration",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"2@gmail\",\n    \"password\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/registration",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"registration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"1@gmail\",\n    \"password\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/favoriteInstruments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/{{favoriteInstrumentsPath}}?userUuid=",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"{{favoriteInstrumentsPath}}"
+					],
+					"query": [
+						{
+							"key": "userUuid",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/favoriteInstruments",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userUuid\":\"\",\n    \"instrumentFigi\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/{{favoriteInstrumentsPath}}/add",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"{{favoriteInstrumentsPath}}",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/favoriteInstruments",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userUuid\":\"\",\n    \"instrumentFigi\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/{{favoriteInstrumentsPath}}/delete",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"{{favoriteInstrumentsPath}}",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/instruments/search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/instruments/search?query=",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"instruments",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://127.0.0.1:3000",
+			"type": "string"
+		},
+		{
+			"key": "favoriteInstrumentsPath",
+			"value": "favoriteInstruments",
+			"type": "string"
+		}
+	]
+}
