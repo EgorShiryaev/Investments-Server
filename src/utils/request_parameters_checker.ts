@@ -56,6 +56,6 @@ export const checkDeleteFavoriteInstrumentsParameters = (
 export const checkSearchInstrumnentsParameters = (
   params: SearchInstrumnentsParameters
 ) => {
-  const fields = [!params.query && 'query'];
+  const fields = [params.query === "" && 'query'];
   return generateErrors(fields);
 };

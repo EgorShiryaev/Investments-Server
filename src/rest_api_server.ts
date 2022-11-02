@@ -50,4 +50,4 @@ server.delete(
   deleteFavoriteInstrumentsHandler
 );
 
-server.get("/instruments/search", searchInstrumentsHandler);
+server.get("/instruments", searchInstrumentsHandler);
