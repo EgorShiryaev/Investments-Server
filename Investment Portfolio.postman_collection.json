@@ -136,7 +136,7 @@
 			"response": []
 		},
 		{
-			"name": "/instruments/search",
+			"name": "/instruments",
 			"request": {
 				"method": "GET",
 				"header": [],
