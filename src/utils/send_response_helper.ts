@@ -12,6 +12,7 @@ const sendResponse = (response: Response, code: number, body?: object) => {
     return;
   }
   resWithStatus.send(convertToJson(body));
+  console.log(body);
 };
 
 const parameterNotFoundCode = 400;

@@ -3,4 +3,4 @@ node_modules/
 
 .DS_Store
 settings.json
-db.sqlite
+investments.sqlite

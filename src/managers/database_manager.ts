@@ -1,8 +1,6 @@
 import DATABASE from '../database';
 
 const runScript = async (sqlScript: string, params?: object) => {
-  console.log(sqlScript, params);
-
   return await new Promise((resolve, reject) => {
     DATABASE.serialize(() => {
       DATABASE.run(sqlScript, params, function (error) {
@@ -20,8 +18,6 @@ const readFirst = async <T>(
   sqlScript: string,
   params?: object
 ): Promise<T | undefined> => {
-  console.log(sqlScript, params);
-
   return await new Promise((resolve, reject) => {
     DATABASE.serialize(() => {
       DATABASE.get(sqlScript, params, (error, row) => {
@@ -36,8 +32,6 @@ const readFirst = async <T>(
 };
 
 const readAll = async <T>(sqlScript: string, params?: object): Promise<T[]> => {
-  console.log(sqlScript, params);
-
   return await new Promise((resolve, reject) => {
     DATABASE.serialize(() => {
       DATABASE.all(sqlScript, params, (error, rows) => {

@@ -9,6 +9,10 @@ import {
 } from '../utils/send_response_helper';
 
 const authHandler: ServerMethodHandler = (request, response) => {
+  console.log('===========================');
+  console.log(request.method, request.path);
+  console.log(request.body);
+
   const params: AuthParameters = request.body;
 
   const errors = checkAuthParameters(params);

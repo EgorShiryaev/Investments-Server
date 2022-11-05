@@ -12,6 +12,10 @@ const addFavoriteInstrumentsHandler: ServerMethodHandler = (
   request,
   response
 ) => {
+  console.log('===========================');
+  console.log(request.method, request.path);
+  console.log(request.body);
+
   const params: AddFavoriteInstrumentsParameters = request.body;
 
   const errors = checkDeleteFavoriteInstrumentsParameters(params);

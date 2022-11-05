@@ -12,6 +12,10 @@ const deleteFavoriteInstrumentsHandler: ServerMethodHandler = (
   request,
   response
 ) => {
+  console.log('===========================');
+  console.log(request.method, request.path);
+  console.log(request.body);
+
   const params: DeleteFavoriteInstrumentsParameters = request.body;
 
   const errors = checkDeleteFavoriteInstrumentsParameters(params);
