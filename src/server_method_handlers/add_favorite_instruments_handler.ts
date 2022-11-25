@@ -1,6 +1,7 @@
 import AddFavoriteInstrumentsParameters from '../interfaces/methods_parameters/add_favorite_instruments_parameters';
 import ServerMethodHandler from '../interfaces/server_method_handler';
 import addToFavoriteInstruments from '../usecases/add_to_favorite_instruments';
+import { logRequest } from '../utils/logger';
 import { checkDeleteFavoriteInstrumentsParameters } from '../utils/request_parameters_checker';
 import {
   sendErrorResponse,
@@ -12,9 +13,7 @@ const addFavoriteInstrumentsHandler: ServerMethodHandler = (
   request,
   response
 ) => {
-  console.log('===========================');
-  console.log(request.method, request.path);
-  console.log(request.body);
+  logRequest(request);
 
   const params: AddFavoriteInstrumentsParameters = request.body;
 

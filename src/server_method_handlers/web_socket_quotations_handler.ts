@@ -52,6 +52,8 @@ const webSocketQuantitionsHandler = (
 const messsageHandler = (data: WebSocket.RawData, userUuid: string): void => {
   const { operation, figi }: WebSocketMessage = JSON.parse(data.toString());
 
+  console.log(operation, figi);
+
   if (operation === WebSocketOperation.subscribe) {
     UserSubscribeInvestmentFigisRepository.addUserInvestmentFigi(
       userUuid,
@@ -73,19 +75,17 @@ const setResponseInterval = (
     const figis =
       UserSubscribeInvestmentFigisRepository.getUserInvestmentFigis(userUuid);
 
-    const quotations: Quotation[] = [];
+    const quotations: Map<string, number> = new Map<string, number>();
 
     figis.forEach((v) => {
       const price = InvestmentFigiPriceRepository.getPrice(v);
+
       if (price !== null) {
-        quotations.push({
-          figi: v,
-          price: price,
-        });
+        quotations.set(v, price);
       }
     });
 
-    ws.send(convertToJson({ quotations: quotations }));
+    ws.send(convertToJson({ quotations: Object.fromEntries(quotations) }));
   }, 500);
 };
 

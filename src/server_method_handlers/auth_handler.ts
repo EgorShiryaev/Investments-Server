@@ -1,6 +1,7 @@
 import AuthParameters from '../interfaces/methods_parameters/auth_parameters';
 import ServerMethodHandler from '../interfaces/server_method_handler';
 import authUser from '../usecases/auth_user';
+import { logRequest } from '../utils/logger';
 import { checkAuthParameters } from '../utils/request_parameters_checker';
 import {
   sendErrorResponse,
@@ -9,9 +10,7 @@ import {
 } from '../utils/send_response_helper';
 
 const authHandler: ServerMethodHandler = (request, response) => {
-  console.log('===========================');
-  console.log(request.method, request.path);
-  console.log(request.body);
+  logRequest(request);
 
   const params: AuthParameters = request.body;
 

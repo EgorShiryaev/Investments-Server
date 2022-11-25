@@ -23,7 +23,7 @@ const initServer = () => {
   const app = express();
 
   createTables()
-    // .then(loadInstruments)
+    .then(loadInstruments)
     .then(() => app.listen(Settings.serverPort, Settings.serverUrl))
     .then(() => {
       console.log('Success start server');

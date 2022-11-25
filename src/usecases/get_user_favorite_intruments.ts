@@ -12,6 +12,8 @@ const getUserFavoriteIntruments = async (userUuid: string) => {
     records.map((v) => getInstument(v.instrumentFigi))
   );
 
+  instruments.sort((a, b) => a.title.localeCompare(b.title));
+
   return convertToInvestmentList(instruments);
 };
 

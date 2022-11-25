@@ -1,6 +1,7 @@
 import FavoriteInstrumentsParameters from '../interfaces/methods_parameters/favorite_intruments_parameters';
 import ServerMethodHandler from '../interfaces/server_method_handler';
 import getUserFavoriteIntruments from '../usecases/get_user_favorite_intruments';
+import { logRequest } from '../utils/logger';
 import { checkFavoriteInstrumentsParameters } from '../utils/request_parameters_checker';
 import {
   sendErrorResponse,
@@ -9,9 +10,7 @@ import {
 } from '../utils/send_response_helper';
 
 const favoriteInstrumentsHandler: ServerMethodHandler = (request, response) => {
-  console.log('===========================');
-  console.log(request.method, request.path);
-  console.log(request.body);
+  logRequest(request);
 
   const params = request.query as unknown as FavoriteInstrumentsParameters;
 
